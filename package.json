@@ -9,6 +9,7 @@
     "eslint": "^8.41.0",
     "jest": "^29.5.0",
     "prettier": "2.8.8",
+    "tsup": "^6.7.0",
     "typescript": "^5.0.4"
   },
   "name": "@indexcoop/analytics-sdk",
@@ -16,7 +17,9 @@
   "version": "0.1.0",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint ./src",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "build:watch": "npm run build -- --watch src",
+    "lint": "prettier -c . && eslint ./src",
     "test": "jest --watch --setupFiles='<rootDir>/test-config.ts'"
   },
   "repository": {
