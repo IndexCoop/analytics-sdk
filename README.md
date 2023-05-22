@@ -10,7 +10,7 @@ Please consider this SDK in `beta` until version 1.0.
 ## Development
 
 ```
-npm test
+npm test:watch
 ```
 
 ## License

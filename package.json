@@ -21,7 +21,8 @@
     "build": "tsup src/index.ts --format cjs,esm --dts --clean",
     "build:watch": "npm run build -- --watch src",
     "lint": "prettier -c . && eslint ./src",
-    "test": "jest --watch --setupFiles='<rootDir>/test-config.ts'",
+    "test": "jest --setupFiles='<rootDir>/test-config.ts'",
+    "test:watch": "jest --watch --setupFiles='<rootDir>/test-config.ts'",
     "release": "release-it"
   },
   "repository": {
