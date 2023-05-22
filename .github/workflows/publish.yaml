@@ -1,7 +1,7 @@
 name: release & publish
 
 env:
-  MAINNET_ALCHEMY_API: ${{ secrets.ALCHEMY_API_KEY }}
+  ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
 
 on:
   push:
