@@ -1,10 +1,8 @@
-import { providers } from "ethers"
-
+import { buildAlchemyProvider } from "../../utils"
 import { IndexSupplyProvider } from "./provider"
 
-const rpcProvider = new providers.StaticJsonRpcProvider(
-  `https://eth-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
-)
+/* eslint-disable  @typescript-eslint/no-non-null-assertion */
+const rpcProvider = buildAlchemyProvider(1, process.env.ALCHEMY_API_KEY!)
 
 describe("IndexSupplyProvider", () => {
   test("returns supply for icETH", async () => {

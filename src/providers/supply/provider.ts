@@ -14,12 +14,8 @@ export class IndexSupplyProvider implements SupplyProvider {
   ) {}
 
   async getSupply(address: string): Promise<BigNumber> {
-    try {
-      const contract = new Contract(address, Erc20Abi, this.provider)
-      const supply: BigNumber = await contract.totalSupply()
-      return supply
-    } catch (error: any) {
-      throw error
-    }
+    const contract = new Contract(address, Erc20Abi, this.provider)
+    const supply: BigNumber = await contract.totalSupply()
+    return supply
   }
 }
