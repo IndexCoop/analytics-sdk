@@ -22,4 +22,10 @@ describe("IndexSupplyProvider", () => {
     console.log(supply.toString())
     expect(supply.gt(0)).toBe(true)
   })
+
+  test("throws error for wrong address", async () => {
+    const icEthWrong = "0x7C07F7aBe10CE8e33DC6C5aD68FE033085256A"
+    const provider = new IndexSupplyProvider(rpcProvider)
+    await expect(provider.getSupply(icEthWrong)).rejects.toThrow()
+  })
 })
