@@ -1,9 +1,9 @@
 interface SupplyProvider {
-  getSupply(): BigInt
+  getSupply(): bigint
 }
 
 export class IndexSupplyProvider implements SupplyProvider {
-  getSupply(): BigInt {
+  getSupply(): bigint {
     return BigInt(0)
   }
 }
