@@ -33,7 +33,7 @@
     "typescript": "^5.0.4"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean --minify",
     "build:watch": "npm run build -- --watch src",
     "lint": "prettier -c . && eslint ./src",
     "test": "jest --setupFiles='<rootDir>/test-config.ts'",
