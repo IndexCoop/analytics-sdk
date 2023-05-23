@@ -1,4 +1,5 @@
 {
   "collectCoverage": true,
-  "roots": ["src"]
+  "roots": ["src"],
+  "testTimeout": 10000
 }
