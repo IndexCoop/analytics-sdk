@@ -2,6 +2,7 @@ name: release & publish
 
 env:
   ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
+  COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
 
 on:
   push:
