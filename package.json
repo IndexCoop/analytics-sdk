@@ -56,6 +56,9 @@
     "url": "https://github.com/IndexCoop/analytics-sdk/issues"
   },
   "homepage": "https://github.com/IndexCoop/analytics-sdk#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "ethers": "^5.6.4"
   }
