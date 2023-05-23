@@ -1,0 +1,4 @@
+{
+  "collectCoverage": true,
+  "roots": ["src"]
+}
