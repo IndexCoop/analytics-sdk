@@ -1,4 +1,23 @@
 {
+  "name": "@indexcoop/analytics-sdk",
+  "description": "The AnalyticsSDK of the Index Coop.",
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=16"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "devDependencies": {
     "@babel/preset-env": "^7.21.5",
     "@babel/preset-typescript": "^7.21.5",
@@ -13,10 +32,6 @@
     "tsup": "^6.7.0",
     "typescript": "^5.0.4"
   },
-  "name": "@indexcoop/analytics-sdk",
-  "description": "The AnalyticsSDK of the Index Coop.",
-  "version": "0.1.0",
-  "main": "index.js",
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --clean",
     "build:watch": "npm run build -- --watch src",
@@ -35,7 +50,7 @@
     "index",
     "coop"
   ],
-  "author": "JD",
+  "author": "IndexCoop",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/IndexCoop/analytics-sdk/issues"
