@@ -14,17 +14,17 @@ export class IcSmmtNavProvider {
     private readonly provider:
       | providers.JsonRpcProvider
       | providers.StaticJsonRpcProvider,
-    private readonly coinGeckoService: CoinGeckoService,
+    private readonly coingeckoService: CoinGeckoService,
   ) {}
 
   async getNav(): Promise<number> {
-    const { coinGeckoService, provider } = this
+    const { coingeckoService, provider } = this
     const stables = [
       "0x6B175474E89094C44Da98b954EedeAC495271d0F", // DAI
       "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC
       "0xdAC17F958D2ee523a2206206994597C13D831ec7", // USDT
     ]
-    const prices = await coinGeckoService.findPrices({
+    const prices = await coingeckoService.findPrices({
       addresses: stables,
       chainId: 1,
       baseCurrency: "usd",
