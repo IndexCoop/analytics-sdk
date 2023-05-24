@@ -1,4 +1,4 @@
-import { BigNumber, Contract, providers, utils } from "ethers"
+import { BigNumber, Contract, utils } from "ethers"
 
 import { buildAlchemyProvider, CoinGeckoService } from "../../utils"
 import { IndexNavProvider } from "./provider"
@@ -24,16 +24,21 @@ describe("IndexSupplyProvider", () => {
   })
 })
 
+interface Position {
+  component: string
+  unit: BigNumber
+}
+
 async function getNav(address: string, chainId: number) {
   const contract = new Contract(address, indexTokenAbi, rpcProvider)
   const positions = await contract.getPositions()
   const positionPrices = await coingeckoService.findPrices({
-    addresses: positions.map((p: any) => p.component),
+    addresses: positions.map((p: Position) => p.component),
     chainId,
     baseCurrency: "usd",
     includeDailyChange: false,
   })
-  const usdValues = positions.map((p: any, index: number) => {
+  const usdValues = positions.map((p: Position) => {
     const priceUsd = positionPrices[p.component.toLowerCase()]?.["usd"]
     const unit = utils.formatUnits(p.unit.toString())
     return priceUsd * Number(unit)

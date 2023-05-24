@@ -37,7 +37,7 @@ export class IndexNavProvider implements NavProvider {
     const contract = new Contract(address, indexTokenAbi, provider)
     const positions: Position[] = await contract.getPositions()
     const positionPrices = await this.getPositionPrices(positions, chainId)
-    const usdValues = positions.map((p: Position, index: number) => {
+    const usdValues = positions.map((p: Position) => {
       const priceUsd = positionPrices[p.component.toLowerCase()]?.[baseCurrency]
       const unit = utils.formatUnits(p.unit.toString())
       return priceUsd * Number(unit)
