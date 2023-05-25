@@ -13,30 +13,47 @@ describe("#CoinGeckoService", () => {
   })
 
   it("getPrice", async () => {
-    const res = await service.getPrice({
+    const res = await service.getTokenPrice({
+      address: icETH,
       chainId: 1,
       baseCurrency: "usd",
-      address: icETH,
+      include24hrVol: false,
     })
     const result = res[icETH.toLowerCase()]
     expect(result.usd).toBeGreaterThan(0)
   })
 
+  it("getPrice w/ 24h volume", async () => {
+    const res = await service.getTokenPrice({
+      address: icETH,
+      chainId: 1,
+      baseCurrency: "usd",
+      include24hrVol: true,
+    })
+    const result = res[icETH.toLowerCase()]
+    console.log(result)
+    expect(result.usd).toBeGreaterThan(0)
+    expect(result["usd_24h_vol"]).toBeDefined()
+    expect(result["usd_24h_vol"]).toBeGreaterThan(0)
+  })
+
   it("getPrice on Optimism", async () => {
-    const res = await service.getPrice({
+    const res = await service.getTokenPrice({
+      address: mnye,
       chainId: 10,
       baseCurrency: "usd",
-      address: mnye,
+      include24hrVol: false,
     })
     const result = res[mnye.toLowerCase()]
     expect(result.usd).toBeGreaterThan(0)
   })
 
   it("getPrice on Polygon", async () => {
-    const res = await service.getPrice({
+    const res = await service.getTokenPrice({
+      address: mvi,
       chainId: 137,
       baseCurrency: "usd",
-      address: mvi,
+      include24hrVol: false,
     })
     const result = res[mvi.toLowerCase()]
     expect(result.usd).toBeGreaterThan(0)
