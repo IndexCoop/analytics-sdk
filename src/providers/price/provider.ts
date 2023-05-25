@@ -1,10 +1,10 @@
 import { CoinGeckoService } from "../../utils"
 
-interface PriveProvider {
+interface PriceProvider {
   getPrice(address: string, chainId: number): Promise<number>
 }
 
-export class IndexPriceProvider implements PriveProvider {
+export class IndexPriceProvider implements PriceProvider {
   constructor(private readonly coingeckoService: CoinGeckoService) {}
 
   async getPrice(address: string, chainId: number): Promise<number> {
