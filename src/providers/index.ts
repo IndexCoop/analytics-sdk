@@ -1,4 +1,5 @@
 export * from "./marketcap"
 export * from "./nav"
+export * from "./price"
 export * from "./supply"
 export * from "./volume"
