@@ -78,3 +78,9 @@ export class CoinGeckoService {
     }
   }
 }
+
+export class CoinGeckoUtils {
+  static get24hVolumeLabel(baseCurrency: string) {
+    return `${baseCurrency}_24h_vol`
+  }
+}
