@@ -1,6 +1,5 @@
 import { providers, utils } from "ethers"
 
-import { IndexNavProvider } from "../nav"
 import { IndexSupplyProvider } from "../supply"
 import { CoinGeckoService } from "utils"
 
@@ -17,12 +16,20 @@ export class IndexMarketCapProvider implements MarketCapProvider {
   ) {}
 
   async getMarketCap(address: string): Promise<number> {
+    const baseCurrency = "usd"
     const { coingeckoService, provider } = this
-    const navProvider = new IndexNavProvider(provider, coingeckoService)
+    const network = await provider.getNetwork()
+    const chainId = network.chainId
     const supplyProvider = new IndexSupplyProvider(provider)
-    const nav = await navProvider.getNav(address)
+    const res = await coingeckoService.getTokenPrice({
+      address,
+      chainId,
+      baseCurrency,
+      include24hrVol: false,
+    })
+    const price = res[address.toLowerCase()][baseCurrency]
     const supply = await supplyProvider.getSupply(address)
     const supplyFormatted = utils.formatUnits(supply.toString())
-    return nav * Number(supplyFormatted)
+    return price * Number(supplyFormatted)
   }
 }
