@@ -1,0 +1,7 @@
+{
+  "collectCoverage": true,
+  "roots": ["src"],
+  "setupFiles": ["<rootDir>/test-config.ts"],
+  "testEnvironment": "node",
+  "testTimeout": 10000
+}
