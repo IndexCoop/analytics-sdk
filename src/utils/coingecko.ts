@@ -17,13 +17,15 @@ export type FindPricesResponse = {
   [key: string]: CurrencyCodePriceMap
 }
 
-export type GetPriceRequest = {
-  chainId: ChainId
-  baseCurrency: string
+export type CoingeckoTokenPriceRequest = {
   address: string
+  chainId: ChainId
+  // A supported currency e.g. 'usd' or 'eur'
+  baseCurrency: string
+  include24hrVol: boolean
 }
 
-export type GetPriceResponse = {
+export type CoingeckoTokenPriceResponse = {
   [key: string]: CurrencyCodePriceMap
 }
 
@@ -31,9 +33,14 @@ export class CoinGeckoService {
   private readonly host = "https://pro-api.coingecko.com/api/v3"
   constructor(private readonly apiKey: string) {}
 
-  async getPrice(req: GetPriceRequest): Promise<GetPriceResponse> {
+  async getTokenPrice(
+    req: CoingeckoTokenPriceRequest,
+  ): Promise<CoingeckoTokenPriceResponse> {
     const assetPlatform = this.getAssetPlatform(req.chainId)
-    const path = `simple/token_price/${assetPlatform}?vs_currencies=${req.baseCurrency}&contract_addresses=${req.address}`
+    let path = `simple/token_price/${assetPlatform}?vs_currencies=${req.baseCurrency}&contract_addresses=${req.address}`
+    if (req.include24hrVol) {
+      path = `${path}&include_24hr_vol=true`
+    }
     const res = await this.GET(path)
     return await res.json()
   }
@@ -69,5 +76,11 @@ export class CoinGeckoService {
       case ChainId.Polygon:
         return "polygon-pos"
     }
+  }
+}
+
+export class CoinGeckoUtils {
+  static get24hVolumeLabel(baseCurrency: string) {
+    return `${baseCurrency}_24h_vol`
   }
 }
