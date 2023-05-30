@@ -1,7 +1,6 @@
 import { utils } from "ethers"
 
 import { buildAlchemyProvider, CoinGeckoService } from "../../utils"
-import { IndexNavProvider } from "../nav"
 import { IndexSupplyProvider } from "../supply"
 import { IndexMarketCapProvider } from "./provider"
 
