@@ -8,14 +8,14 @@ const coingeckoService = new CoinGeckoService(process.env.COINGECKO_API_KEY!)
 const rpcProvider = buildAlchemyProvider(1, process.env.ALCHEMY_API_KEY!)
 
 describe("IndexSupplyProvider", () => {
-  test("returns the supply for icSMMT", async () => {
+  test("returns the NAV for icSMMT", async () => {
     const icSMMT = "0xc30FBa978743a43E736fc32FBeEd364b8A2039cD"
     const provider = new IndexNavProvider(rpcProvider, coingeckoService)
     const nav = await provider.getNav(icSMMT)
     await expect(nav).toBeGreaterThan(0)
   })
 
-  test("returns the supply for icETH", async () => {
+  test("returns the NAV for icETH", async () => {
     const icETH = "0x7C07F7aBe10CE8e33DC6C5aD68FE033085256A84"
     const expectedNav = await getNav(icETH, 1)
     const provider = new IndexNavProvider(rpcProvider, coingeckoService)
