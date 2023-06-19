@@ -9,6 +9,7 @@ const AaveProtocolDataProviderAbi = [
 ]
 
 interface IcREthSupplyData {
+  availableSupply: number
   cap: number
   totalSupply: number
 }
@@ -31,7 +32,10 @@ export class IndexREthProvider {
     const res: { borrowCap: BigNumber; supplyCap: BigNumber } =
       await contract.getReserveCaps(rETH)
     const cap = Number(res.supplyCap.toString())
+
+    const availableSupply = cap - totalSupply
     return {
+      availableSupply,
       cap,
       totalSupply,
     }

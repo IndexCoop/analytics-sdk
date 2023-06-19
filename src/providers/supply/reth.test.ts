@@ -30,6 +30,7 @@ describe("IndexSupplyProvider", () => {
 
     const provider = new IndexREthProvider(rpcProvider)
     const supplyData = await provider.getSupplyData()
+    expect(supplyData.availableSupply).toBe(cap - totalSupply)
     expect(supplyData.cap).toBe(cap)
     expect(supplyData.totalSupply).toBe(totalSupply)
   })
