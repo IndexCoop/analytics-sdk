@@ -1,4 +1,4 @@
-import { BigNumber, Contract, providers, utils } from "ethers"
+import { BigNumber, Contract, utils } from "ethers"
 
 import { buildAlchemyProvider } from "../../utils"
 import { IndexREthProvider } from "./reth"
