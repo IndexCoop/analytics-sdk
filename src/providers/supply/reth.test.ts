@@ -14,20 +14,18 @@ const AaveProtocolDataProviderAbi = [
   "function getReserveCaps(address asset) external view returns (uint256 borrowCap, uint256 supplyCap)",
 ]
 
-describe("IndexSupplyProvider", () => {
-  test("returns supply for icETH", async () => {
+describe("IndexREthProvider", () => {
+  test("returns supply data for icRETH", async () => {
     const contract = new Contract(
       AaveProtocolDataProvider,
       AaveProtocolDataProviderAbi,
       rpcProvider,
     )
-
     const aTokenTotalSupply = await contract.getATokenTotalSupply(rETH)
     const totalSupply = Math.ceil(Number(utils.formatUnits(aTokenTotalSupply)))
     const res: { borrowCap: BigNumber; supplyCap: BigNumber } =
       await contract.getReserveCaps(rETH)
     const cap = Number(res.supplyCap.toString())
-
     const provider = new IndexREthProvider(rpcProvider)
     const supplyData = await provider.getSupplyData()
     expect(supplyData.availableSupply).toBe(cap - totalSupply)
