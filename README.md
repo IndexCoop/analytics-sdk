@@ -24,6 +24,7 @@ Each indicator has its own [provider](./src/providers/). The following indicator
 - Net Asset Value (NAV)
 - Price
 - (Current) Supply
+- TVL (for all Index products)
 - (24h) Volume
 
 With just a few lines you can setup any of the providers and fetch the required data.
@@ -66,6 +67,14 @@ const price = await provider.getPrice(index, chainId)
 ```typescript
 const provider = new IndexSupplyProvider(rpcProvider)
 const supply = await provider.getSupply(index)
+```
+
+### TVL
+
+```typescript
+// returns the TVL for all Index products
+const provider = new IndexTvlProvider(rpcProvider, coingeckoService)
+const supply = await provider.getTvl()
 ```
 
 ### 24h Volume
