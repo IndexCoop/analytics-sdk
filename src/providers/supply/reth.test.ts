@@ -1,6 +1,6 @@
 import { BigNumber, Contract, utils } from "ethers"
 
-import { buildAlchemyProviderPredefined } from "../../utils"
+import { buildAlchemyProviderPredefined } from "../../utils/testhelpers"
 import { IndexREthProvider } from "./reth"
 
 const rpcProvider = buildAlchemyProviderPredefined(1)
