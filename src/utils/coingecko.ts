@@ -22,6 +22,7 @@ export type CoingeckoTokenPriceRequest = {
   chainId: ChainId
   // A supported currency e.g. 'usd' or 'eur'
   baseCurrency: string
+  include24hrChange?: boolean
   include24hrVol: boolean
 }
 
@@ -38,6 +39,9 @@ export class CoinGeckoService {
   ): Promise<CoingeckoTokenPriceResponse> {
     const assetPlatform = this.getAssetPlatform(req.chainId)
     let path = `simple/token_price/${assetPlatform}?vs_currencies=${req.baseCurrency}&contract_addresses=${req.address}`
+    if (req.include24hrChange) {
+      path = `${path}&include_24hr_change=true`
+    }
     if (req.include24hrVol) {
       path = `${path}&include_24hr_vol=true`
     }
@@ -80,6 +84,10 @@ export class CoinGeckoService {
 }
 
 export class CoinGeckoUtils {
+  static get24hChangeLabel(baseCurrency: string) {
+    return `${baseCurrency}_24h_change`
+  }
+
   static get24hVolumeLabel(baseCurrency: string) {
     return `${baseCurrency}_24h_vol`
   }

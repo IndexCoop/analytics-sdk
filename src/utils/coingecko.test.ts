@@ -23,6 +23,20 @@ describe("#CoinGeckoService", () => {
     expect(result.usd).toBeGreaterThan(0)
   })
 
+  it("getPrice w/ 24h change", async () => {
+    const res = await service.getTokenPrice({
+      address: icETH,
+      chainId: 1,
+      baseCurrency: "usd",
+      include24hrChange: true,
+      include24hrVol: true,
+    })
+    const result = res[icETH.toLowerCase()]
+    expect(result.usd).toBeGreaterThan(0)
+    expect(result["usd_24h_change"]).toBeDefined()
+    expect(result["usd_24h_change"]).not.toBe(0)
+  })
+
   it("getPrice w/ 24h volume", async () => {
     const res = await service.getTokenPrice({
       address: icETH,
@@ -84,11 +98,19 @@ describe("#CoinGeckoService", () => {
 })
 
 describe("#CoinGeckoUtils", () => {
-  it("returns the correct label for eur", () => {
+  it("returns the correct 24h change label for eur", () => {
+    expect(CoinGeckoUtils.get24hChangeLabel("eur")).toBe("eur_24h_change")
+  })
+
+  it("returns the correct 24h change label for usd", () => {
+    expect(CoinGeckoUtils.get24hChangeLabel("usd")).toBe("usd_24h_change")
+  })
+
+  it("returns the correct 24h volume label for eur", () => {
     expect(CoinGeckoUtils.get24hVolumeLabel("eur")).toBe("eur_24h_vol")
   })
 
-  it("returns the correct label for usd", () => {
+  it("returns the correct 24h volume label for usd", () => {
     expect(CoinGeckoUtils.get24hVolumeLabel("usd")).toBe("usd_24h_vol")
   })
 })
