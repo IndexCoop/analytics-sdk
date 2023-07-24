@@ -3,16 +3,14 @@ import { utils } from "ethers"
 import { buildAlchemyProvider, CoinGeckoService } from "../../utils"
 import { IndexMarketCapProvider } from "../marketcap"
 import { IndexNavProvider } from "../nav"
-import { IndexPriceProvider } from "../price"
 import { IndexSupplyProvider } from "../supply"
-import { IndexVolumeProvider } from "../volume"
 import { IndexAnalyticsProvider } from "./provider"
 
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 const coingeckoService = new CoinGeckoService(process.env.COINGECKO_API_KEY!)
 const rpcProvider = buildAlchemyProvider(1, process.env.ALCHEMY_API_KEY!)
 
-describe("IndexSupplyProvider", () => {
+describe("IndexAnalyticsProvider", () => {
   test("returns complete analytics data", async () => {
     const address = "0x72e364F2ABdC788b7E918bc238B21f109Cd634D7" // MVI
     const provider = new IndexAnalyticsProvider(rpcProvider, coingeckoService)
@@ -21,20 +19,22 @@ describe("IndexSupplyProvider", () => {
       rpcProvider,
       coingeckoService,
     ).getMarketCap(address)
-    const marketPrice = await new IndexPriceProvider(coingeckoService).getPrice(
-      address,
-      1,
-    )
     const navPrice = await new IndexNavProvider(
       rpcProvider,
       coingeckoService,
     ).getNav(address)
     const supplyProvider = new IndexSupplyProvider(rpcProvider)
     const totalSupply = await supplyProvider.getSupply(address)
-    const volume = await new IndexVolumeProvider(coingeckoService).get24hVolume(
+    const coingeckoRes = await coingeckoService.getTokenPrice({
       address,
-      1,
-    )
+      chainId: 1,
+      baseCurrency: "usd",
+      include24hrChange: true,
+      include24hrVol: true,
+    })
+    const change24h = coingeckoRes[address.toLowerCase()]["usd_24h_change"]
+    const marketPrice = coingeckoRes[address.toLowerCase()]["usd"]
+    const volume = coingeckoRes[address.toLowerCase()]["usd_24h_vol"]
     console.log(analyticsData)
     expect(analyticsData.address).toEqual(address)
     expect(analyticsData.name).toEqual("Metaverse Index")
@@ -46,6 +46,7 @@ describe("IndexSupplyProvider", () => {
     expect(analyticsData.totalSupply).toEqual(
       utils.formatUnits(totalSupply.toString()),
     )
-    expect(analyticsData.volume).toEqual(volume)
+    expect(analyticsData.change24h).toEqual(change24h)
+    expect(analyticsData.volume24h).toEqual(volume)
   })
 })
