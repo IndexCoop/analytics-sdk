@@ -1,3 +1,4 @@
+export * from "./analytics"
 export * from "./marketcap"
 export * from "./nav"
 export * from "./price"
