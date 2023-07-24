@@ -35,7 +35,6 @@ describe("IndexAnalyticsProvider", () => {
     const change24h = coingeckoRes[address.toLowerCase()]["usd_24h_change"]
     const marketPrice = coingeckoRes[address.toLowerCase()]["usd"]
     const volume = coingeckoRes[address.toLowerCase()]["usd_24h_vol"]
-    console.log(analyticsData)
     expect(analyticsData.address).toEqual(address)
     expect(analyticsData.name).toEqual("Metaverse Index")
     expect(analyticsData.symbol).toEqual("MVI")
