@@ -101,4 +101,4 @@ const supply = await provider.getTvl()
 
 ## License
 
-MIT
+[MIT](./LICENSE)
