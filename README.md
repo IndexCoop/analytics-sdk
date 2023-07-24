@@ -21,8 +21,8 @@ npm test:watch
 Each indicator has its own [provider](./src/providers/). The following indicators are currently provided and return the according data for an Index token.
 
 - Market Cap (NAV \* supply)
+- Market Price
 - Net Asset Value (NAV)
-- Price
 - (Current) Supply
 - TVL (for all Index products)
 - (24h) Volume
@@ -46,6 +46,14 @@ const provider = new IndexMarketCapProvider(rpcProvider, coingecko)
 const marketCap = await provider.getMarketCap(index)
 ```
 
+### Markt Price
+
+```typescript
+const coingecko = new CoinGeckoService(coingeckoApiKey)
+const provider = new IndexPriceProvider(coingecko)
+const price = await provider.getPrice(index, chainId)
+```
+
 ### NAV
 
 ```typescript
@@ -54,27 +62,11 @@ const provider = new IndexNavProvider(rpcProvider, coingecko)
 const nav = await provider.getNav(index)
 ```
 
-### Price
-
-```typescript
-const coingecko = new CoinGeckoService(coingeckoApiKey)
-const provider = new IndexPriceProvider(coingecko)
-const price = await provider.getPrice(index, chainId)
-```
-
 ### Supply
 
 ```typescript
 const provider = new IndexSupplyProvider(rpcProvider)
 const supply = await provider.getSupply(index)
-```
-
-### TVL
-
-```typescript
-// returns the TVL for all Index products
-const provider = new IndexTvlProvider(rpcProvider, coingeckoService)
-const supply = await provider.getTvl()
 ```
 
 ### 24h Volume
@@ -86,6 +78,25 @@ const index = "0x7C07F7aBe10CE8e33DC6C5aD68FE033085256A84" // icETH
 const coingecko = new CoinGeckoService(coingeckoApiKey)
 const provider = new IndexVolumeProvider(coingecko)
 const volume = await provider.get24hVolume(index, chainId)
+```
+
+## AnalyticsProvider
+
+To fetch all analytics data at once use the `IndexAnalyticsProvider`.
+
+```typescript
+const address = "0x7C07F7aBe10CE8e33DC6C5aD68FE033085256A84" // icETH
+const provider = new IndexAnalyticsProvider(rpcProvider, coingeckoService)
+const analyticsData = await provider.getAnalytics(address)
+```
+
+### TVL
+
+Returns TVL for all of the Index products combined.
+
+```typescript
+const provider = new IndexTvlProvider(rpcProvider, coingeckoService)
+const supply = await provider.getTvl()
 ```
 
 ## License
