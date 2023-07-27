@@ -1,14 +1,14 @@
 import { buildAlchemyProvider, CoinGeckoService } from "../../utils"
-import { IcSmmtNavProvider } from "./icsmmt"
+import { Eth2xFliNavProvider } from "./eth2xfli"
 
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 const coingeckoService = new CoinGeckoService(process.env.COINGECKO_API_KEY!)
 const rpcProvider = buildAlchemyProvider(1, process.env.ALCHEMY_API_KEY!)
 
-describe("IcSmmtNavProvder", () => {
-  test("returns NAV for icSMMT", async () => {
-    const provider = new IcSmmtNavProvider(rpcProvider, coingeckoService)
+describe("Eth2xFliNavProvider", () => {
+  test("returns NAV for ETH2xFLI", async () => {
+    const provider = new Eth2xFliNavProvider(rpcProvider, coingeckoService)
     const nav = await provider.getNav()
-    expect(nav).toBeGreaterThan(0)
+    expect(nav).toBeGreaterThan(1)
   })
 })
