@@ -3,6 +3,7 @@ import { BigNumber, Contract, utils } from "ethers"
 import { buildAlchemyProvider, CoinGeckoService } from "../../utils"
 import { Eth2xFliNavProvider } from "./eth2xfli"
 import { IndexNavProvider } from "./provider"
+import { Ic21NavProvider } from "./ic21"
 
 /* eslint-disable  @typescript-eslint/no-non-null-assertion */
 const coingeckoService = new CoinGeckoService(process.env.COINGECKO_API_KEY!)
@@ -15,6 +16,15 @@ describe("IndexSupplyProvider", () => {
     const expectedNav = await eth2xProvider.getNav()
     const provider = new IndexNavProvider(rpcProvider, coingeckoService)
     const nav = await provider.getNav(eth2xfli)
+    await expect(nav).toBeCloseTo(expectedNav)
+  })
+
+  test("returns the NAV for ic21", async () => {
+    const ic21 = "0x1B5E16C5b20Fb5EE87C61fE9Afe735Cca3B21A65"
+    const ic21NavProvider = new Ic21NavProvider(rpcProvider, coingeckoService)
+    const expectedNav = await ic21NavProvider.getNav()
+    const provider = new IndexNavProvider(rpcProvider, coingeckoService)
+    const nav = await provider.getNav(ic21)
     await expect(nav).toBeCloseTo(expectedNav)
   })
 
