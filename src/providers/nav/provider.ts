@@ -3,6 +3,7 @@ import { BigNumber, Contract, providers, utils } from "ethers"
 import { CoinGeckoService, FindPricesResponse } from "utils/coingecko"
 import { Eth2xFliNavProvider } from "./eth2xfli"
 import { IcSmmtNavProvider } from "./icsmmt"
+import { Ic21NavProvider } from "./ic21"
 
 interface NavProvider {
   getNav(address: string): Promise<number>
@@ -14,6 +15,7 @@ interface Position {
 }
 
 const eth2xfli = "0xAa6E8127831c9DE45ae56bB1b0d4D4Da6e5665BD"
+const ic21 = "0x1B5E16C5b20Fb5EE87C61fE9Afe735Cca3B21A65"
 const icSMMT = "0xc30FBa978743a43E736fc32FBeEd364b8A2039cD"
 
 export class IndexNavProvider implements NavProvider {
@@ -36,6 +38,12 @@ export class IndexNavProvider implements NavProvider {
         coingeckoService,
       )
       const nav = await eth2xfliProvider.getNav()
+      return nav
+    }
+    // ic21 specific calculation
+    if (address.toLowerCase() === ic21.toLowerCase()) {
+      const ic21Provider = new Ic21NavProvider(provider, coingeckoService)
+      const nav = await ic21Provider.getNav()
       return nav
     }
     // icSMMT specific calculation

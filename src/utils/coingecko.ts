@@ -26,6 +26,13 @@ export type CoingeckoTokenPriceRequest = {
   include24hrVol: boolean
 }
 
+export type CoingeckoTokenPriceByIdRequest = {
+  // Find necessary id's on the coingecko token page
+  ids: string[]
+  // A supported currency e.g. 'usd' or 'eur'
+  baseCurrency: string
+}
+
 export type CoingeckoTokenPriceResponse = {
   [key: string]: CurrencyCodePriceMap
 }
@@ -45,6 +52,16 @@ export class CoinGeckoService {
     if (req.include24hrVol) {
       path = `${path}&include_24hr_vol=true`
     }
+    const res = await this.GET(path)
+    return await res.json()
+  }
+
+  async getTokenPriceById(
+    req: CoingeckoTokenPriceByIdRequest,
+  ): Promise<CoingeckoTokenPriceResponse> {
+    const path = `simple/price/?vs_currencies=${
+      req.baseCurrency
+    }&ids=${req.ids.toString()}`
     const res = await this.GET(path)
     return await res.json()
   }

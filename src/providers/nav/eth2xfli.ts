@@ -1,4 +1,4 @@
-import { BigNumber, Contract, providers, utils } from "ethers"
+import { BigNumber, providers } from "ethers"
 
 import { CoinGeckoService, FindPricesResponse } from "utils/coingecko"
 import { getPositions } from "../../utils/positions"
