@@ -17,6 +17,7 @@ const indices = [
   "0x36c833Eed0D376f75D1ff9dFDeE260191336065e", // gtcETH
   "0x341c05c0E9b33C0E38d64de76516b2Ce970bB3BE", // dsETH
   "0x7C07F7aBe10CE8e33DC6C5aD68FE033085256A84", // icETH
+  "0x1B5E16C5b20Fb5EE87C61fE9Afe735Cca3B21A65", // ic21
 ]
 
 export class IndexTvlProvider implements TvlProvider {
