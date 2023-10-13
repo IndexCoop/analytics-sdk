@@ -61,11 +61,15 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
       include24hrChange: true,
       include24hrVol: true,
     })
+    const coingeckoData = coingeckoRes[address.toLowerCase()]
     const change24hLabel = CoinGeckoUtils.get24hChangeLabel(baseCurrency)
-    const change24h = coingeckoRes[address.toLowerCase()][change24hLabel]
-    const marketPrice = coingeckoRes[address.toLowerCase()][baseCurrency]
+    const change24h =
+      coingeckoData === undefined ? 0 : coingeckoData[change24hLabel]
+    const marketPrice =
+      coingeckoData === undefined ? 0 : coingeckoData[baseCurrency]
     const volume24hLabel = CoinGeckoUtils.get24hVolumeLabel(baseCurrency)
-    const volume24h = coingeckoRes[address.toLowerCase()][volume24hLabel]
+    const volume24h =
+      coingeckoData === undefined ? 0 : coingeckoData[volume24hLabel]
     const marketCap = await marketCapProvider.getMarketCap(address)
     const navPrice = await navProvider.getNav(address)
     const supplyFormatted = utils.formatUnits(totalSupply.toString())
