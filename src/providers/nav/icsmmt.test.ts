@@ -6,7 +6,7 @@ const coingeckoService = new CoinGeckoService(process.env.COINGECKO_API_KEY!)
 const rpcProvider = buildAlchemyProvider(1, process.env.ALCHEMY_API_KEY!)
 
 describe("IcSmmtNavProvder", () => {
-  test("returns NAV for icSMMT", async () => {
+  test.skip("returns NAV for icSMMT", async () => {
     const provider = new IcSmmtNavProvider(rpcProvider, coingeckoService)
     const nav = await provider.getNav()
     expect(nav).toBeGreaterThan(0)

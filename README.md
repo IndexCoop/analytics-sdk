@@ -16,6 +16,10 @@ Pricing data is powered by [CoinGecko](https://www.coingecko.com).
 npm test:watch
 ```
 
+### Releasing a new index token
+
+When releasing a new index token make sure to add it to the [tvl provider](./src/providers/tvl/provider.ts). So that the provider reflects the total TVL over all Index's products.
+
 ## Examples
 
 Each indicator has its own [provider](./src/providers/). The following indicators are currently provided and return the according data for an Index token.
@@ -82,7 +86,7 @@ const volume = await provider.get24hVolume(index, chainId)
 
 ## AnalyticsProvider
 
-To fetch all analytics data at once use the `IndexAnalyticsProvider`.
+To fetch all analytics data for a token at once use the `IndexAnalyticsProvider`.
 
 ```typescript
 const address = "0x7C07F7aBe10CE8e33DC6C5aD68FE033085256A84" // icETH
