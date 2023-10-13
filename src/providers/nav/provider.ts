@@ -56,13 +56,25 @@ export class IndexNavProvider implements NavProvider {
     const contract = new Contract(address, indexTokenAbi, provider)
     const positions: Position[] = await contract.getPositions()
     const positionPrices = await this.getPositionPrices(positions, chainId)
-    const usdValues = positions.map((p: Position) => {
+    const decimalsForPositionPromises = positions.map((p: Position) => {
+      return this.getDecimals(p.component)
+    })
+    const decimalsForPosition = await Promise.all(decimalsForPositionPromises)
+    const usdValues = positions.map((p: Position, index) => {
       const priceUsd = positionPrices[p.component.toLowerCase()]?.[baseCurrency]
-      const unit = utils.formatUnits(p.unit.toString())
+      const unit = utils.formatUnits(
+        p.unit.toString(),
+        decimalsForPosition[index],
+      )
       return priceUsd * Number(unit)
     })
     const nav = usdValues.reduce((prev, curr) => curr + prev, 0)
     return nav
+  }
+
+  private async getDecimals(address: string): Promise<number> {
+    const contract = new Contract(address, Erc20Abi, this.provider)
+    return await contract.decimals()
   }
 
   private async getPositionPrices(
@@ -77,6 +89,8 @@ export class IndexNavProvider implements NavProvider {
     })
   }
 }
+
+const Erc20Abi = ["function decimals() public view returns (uint8)"]
 
 const indexTokenAbi = [
   {

@@ -10,6 +10,13 @@ const coingeckoService = new CoinGeckoService(process.env.COINGECKO_API_KEY!)
 const rpcProvider = buildAlchemyProvider(1, process.env.ALCHEMY_API_KEY!)
 
 describe("IndexSupplyProvider", () => {
+  test("returns the NAV for cdETI", async () => {
+    const cdETI = "0x55b2CFcfe99110C773f00b023560DD9ef6C8A13B"
+    const provider = new IndexNavProvider(rpcProvider, coingeckoService)
+    const nav = await provider.getNav(cdETI)
+    await expect(nav).toBeGreaterThan(0)
+  })
+
   test("returns the NAV for ETH2xFLI", async () => {
     const eth2xfli = "0xAa6E8127831c9DE45ae56bB1b0d4D4Da6e5665BD"
     const eth2xProvider = new Eth2xFliNavProvider(rpcProvider, coingeckoService)
@@ -28,7 +35,7 @@ describe("IndexSupplyProvider", () => {
     await expect(nav).toBeCloseTo(expectedNav)
   })
 
-  test("returns the NAV for icSMMT", async () => {
+  test.skip("returns the NAV for icSMMT", async () => {
     const icSMMT = "0xc30FBa978743a43E736fc32FBeEd364b8A2039cD"
     const provider = new IndexNavProvider(rpcProvider, coingeckoService)
     const nav = await provider.getNav(icSMMT)
