@@ -18,6 +18,15 @@ interface IndexAnalytics {
   volume24h: number
 }
 
+interface IndexAnalyticsSummary {
+  address: string
+  navPrice: number
+  marketCap: number
+  change24h: number
+}
+
+const MAINNET_CHAIN_ID = 1
+
 interface AnalyticsProvider {
   getAnalytics(address: string): Promise<IndexAnalytics>
 }
@@ -84,6 +93,36 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
       marketCap,
       change24h,
       volume24h,
+    }
+  }
+
+  async getAnalyticsSummary(address: string): Promise<IndexAnalyticsSummary> {
+    const { baseCurrency, coingeckoService, provider } = this
+    const marketCapProvider = new IndexMarketCapProvider(
+      provider,
+      coingeckoService,
+    )
+    const navProvider = new IndexNavProvider(provider, coingeckoService)
+
+    const [marketCap, navPrice, coingeckoRes] = await Promise.all([
+      marketCapProvider.getMarketCap(address),
+      navProvider.getNav(address),
+      coingeckoService.getTokenPrice({
+        address,
+        chainId: MAINNET_CHAIN_ID,
+        baseCurrency,
+        include24hrChange: true,
+        include24hrVol: false,
+      }),
+    ])
+
+    const coingeckoData = coingeckoRes[address.toLowerCase()] ?? null
+
+    return {
+      address,
+      navPrice,
+      marketCap,
+      change24h: coingeckoData?.[CoinGeckoUtils.get24hChangeLabel(baseCurrency)] ?? 0,
     }
   }
 }
