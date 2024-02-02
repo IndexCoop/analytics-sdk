@@ -12,20 +12,30 @@ interface IndexAnalytics {
   symbol: string
   decimals: number
   address: string
-  totalSupply: string
+  totalSupply?: string
   marketPrice: number
   navPrice: number
   marketCap: number
   change24h: number
-  volume24h: number
+  volume24h?: number
+}
+
+interface IndexAnalyticsOptions {
+  includeTotalSupply?: boolean
+  include24hrVolume?: boolean
 }
 
 interface AnalyticsProvider {
-  getAnalytics(address: string): Promise<IndexAnalytics>
+  getAnalytics(
+    address: string,
+    options?: IndexAnalyticsOptions,
+  ): Promise<IndexAnalytics>
 }
 
 export class IndexAnalyticsProvider implements AnalyticsProvider {
   private baseCurrency = "usd"
+  // For now we can save time by always assuming Ethereum
+  private chainId = 1
 
   constructor(
     private readonly provider:
@@ -34,49 +44,55 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
     private readonly coingeckoService: CoinGeckoService,
   ) {}
 
-  async getAnalytics(address: string): Promise<IndexAnalytics> {
-    const { baseCurrency, coingeckoService, provider } = this
+  async getAnalytics(
+    address: string,
+    options: IndexAnalyticsOptions = {
+      includeTotalSupply: true,
+      include24hrVolume: true,
+    },
+  ): Promise<IndexAnalytics> {
+    const { baseCurrency, chainId, coingeckoService, provider } = this
     const marketCapProvider = new IndexMarketCapProvider(
       provider,
       coingeckoService,
     )
     const navProvider = new IndexNavProvider(provider, coingeckoService)
-    const supplyProvider = new IndexSupplyProvider(provider)
-    // For now we can save time by always assuming Ethereum
-    const chainId = 1
-    // Token data fetched statically to avoid lengthy contract interactions
-    const token = TokenData[address.toLowerCase()]
-    const totalSupply = await supplyProvider.getSupply(address)
-    const coingeckoRes = await coingeckoService.getTokenPrice({
+
+    const supplyPromise = options.includeTotalSupply
+      ? new IndexSupplyProvider(provider).getSupply(address)
+      : Promise.resolve(null)
+    const marketCapPromise = marketCapProvider.getMarketCap(address)
+    const navPricePromise = navProvider.getNav(address)
+    const coingeckoPromise = coingeckoService.getTokenPrice({
       address,
       chainId,
       baseCurrency,
       include24hrChange: true,
-      include24hrVol: true,
+      include24hrVol: options.include24hrVolume ?? false,
     })
+
+    const [totalSupply, marketCap, navPrice, coingeckoRes] = await Promise.all([
+      supplyPromise,
+      marketCapPromise,
+      navPricePromise,
+      coingeckoPromise
+    ])
     const coingeckoData = coingeckoRes[address.toLowerCase()]
-    const change24hLabel = CoinGeckoUtils.get24hChangeLabel(baseCurrency)
-    const change24h =
-      coingeckoData === undefined ? 0 : coingeckoData[change24hLabel]
-    const marketPrice =
-      coingeckoData === undefined ? 0 : coingeckoData[baseCurrency]
-    const volume24hLabel = CoinGeckoUtils.get24hVolumeLabel(baseCurrency)
-    const volume24h =
-      coingeckoData === undefined ? 0 : coingeckoData[volume24hLabel]
-    const marketCap = await marketCapProvider.getMarketCap(address)
-    const navPrice = await navProvider.getNav(address)
-    const supplyFormatted = utils.formatUnits(totalSupply.toString())
+    const token = TokenData[address.toLowerCase()]
+
     return {
       symbol: token.symbol,
       address,
       name: token.name,
       decimals: token.decimals,
-      totalSupply: supplyFormatted,
-      marketPrice,
+      totalSupply: options.includeTotalSupply ? utils.formatUnits(totalSupply!.toString()) : undefined,
+      marketPrice: coingeckoData?.[baseCurrency] ?? 0,
       navPrice,
       marketCap,
-      change24h,
-      volume24h,
+      change24h: coingeckoData?.[CoinGeckoUtils.get24hChangeLabel(baseCurrency)] ?? 0,
+      volume24h: options.include24hrVolume
+        ? coingeckoData?.[CoinGeckoUtils.get24hVolumeLabel(baseCurrency)] ?? 0
+        : undefined,
     }
   }
 }
