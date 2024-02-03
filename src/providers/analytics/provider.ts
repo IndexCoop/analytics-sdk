@@ -12,12 +12,12 @@ interface IndexAnalytics {
   symbol: string
   decimals: number
   address: string
-  totalSupply?: string
-  marketPrice: number
-  navPrice: number
-  marketCap: number
-  change24h: number
-  volume24h?: number
+  totalSupply: string | null
+  marketPrice: number | null
+  navPrice: number | null
+  marketCap: number | null
+  change24h: number | null
+  volume24h: number | null
 }
 
 interface IndexAnalyticsOptions {
@@ -71,13 +71,17 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
       include24hrVol: options.include24hrVolume ?? false,
     })
 
-    const [totalSupply, marketCap, navPrice, coingeckoRes] = await Promise.all([
-      supplyPromise,
-      marketCapPromise,
-      navPricePromise,
-      coingeckoPromise
-    ])
-    const coingeckoData = coingeckoRes[address.toLowerCase()]
+    const [totalSupply, marketCap, navPrice, coingeckoRes] =
+      await Promise.allSettled([
+        supplyPromise,
+        marketCapPromise,
+        navPricePromise,
+        coingeckoPromise,
+      ])
+    const coingeckoData =
+      coingeckoRes.status === "fulfilled"
+        ? coingeckoRes.value?.[address.toLowerCase()]
+        : null
     const token = TokenData[address.toLowerCase()]
 
     return {
@@ -85,14 +89,19 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
       address,
       name: token.name,
       decimals: token.decimals,
-      totalSupply: options.includeTotalSupply ? utils.formatUnits(totalSupply!.toString()) : undefined,
-      marketPrice: coingeckoData?.[baseCurrency] ?? 0,
-      navPrice,
-      marketCap,
-      change24h: coingeckoData?.[CoinGeckoUtils.get24hChangeLabel(baseCurrency)] ?? 0,
+      totalSupply:
+        options.includeTotalSupply && totalSupply
+          ? utils.formatUnits(totalSupply.toString())
+          : null,
+      marketPrice: coingeckoData?.[baseCurrency] ?? null,
+      navPrice: navPrice.status === "fulfilled" ? navPrice.value : null,
+      marketCap: marketCap.status === "fulfilled" ? marketCap.value : null,
+      change24h:
+        coingeckoData?.[CoinGeckoUtils.get24hChangeLabel(baseCurrency)] ?? null,
       volume24h: options.include24hrVolume
-        ? coingeckoData?.[CoinGeckoUtils.get24hVolumeLabel(baseCurrency)] ?? 0
-        : undefined,
+        ? coingeckoData?.[CoinGeckoUtils.get24hVolumeLabel(baseCurrency)] ??
+          null
+        : null,
     }
   }
 }
