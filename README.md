@@ -103,6 +103,22 @@ const provider = new IndexTvlProvider(rpcProvider, coingeckoService)
 const supply = await provider.getTvl()
 ```
 
+## Releasing
+
+To manually release the package (after bumping the version number):
+
+```bash
+npm run lint
+npm test
+npm run build
+npm publish
+```
+
+- Add a version tag to the last commit (and push to origin).
+- Go to [tags](https://github.com/IndexCoop/analytics-sdk/tags) and create a release
+- Use `Generate release notes` and alter anything that makes sense
+- Publish (set as latest release)
+
 ## License
 
 [MIT](./LICENSE)
