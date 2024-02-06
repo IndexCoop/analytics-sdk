@@ -1,6 +1,6 @@
 import { providers, utils } from "ethers"
 
-import { CoinGeckoService, CoinGeckoUtils } from "../../utils"
+import { CoinGeckoService, CoinGeckoUtils, CoingeckoTokenPriceResponse, getFulfilledValueOrNull } from "../../utils"
 import { IndexMarketCapProvider } from "../marketcap"
 import { IndexNavProvider } from "../nav"
 import { IndexSupplyProvider } from "../supply"
@@ -85,12 +85,8 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
         navPricePromise,
         coingeckoPromise,
       ])
-    const totalSupplyValue =
-      totalSupply.status === "fulfilled" ? totalSupply.value : null
-    const coingeckoData =
-      coingeckoRes.status === "fulfilled"
-        ? coingeckoRes.value?.[address.toLowerCase()]
-        : null
+    const totalSupplyValue = getFulfilledValueOrNull(totalSupply)
+    const coingeckoData = (getFulfilledValueOrNull(coingeckoRes) as CoingeckoTokenPriceResponse | null)?.[address.toLowerCase()]
     const token = TokenData[address.toLowerCase()]
 
     const change24hLabel = CoinGeckoUtils.get24hChangeLabel(baseCurrency)
@@ -106,8 +102,8 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
           ? utils.formatUnits(totalSupplyValue.toString())
           : null,
       marketPrice: coingeckoData?.[baseCurrency] ?? null,
-      navPrice: navPrice.status === "fulfilled" ? navPrice.value : null,
-      marketCap: marketCap.status === "fulfilled" ? marketCap.value : null,
+      navPrice: getFulfilledValueOrNull(navPrice) as number | null,
+      marketCap: getFulfilledValueOrNull(marketCap) as number | null,
       change24h: coingeckoData?.[change24hLabel] ?? null,
       volume24h: coingeckoData?.[volume24hLabel] ?? null,
     }
