@@ -21,7 +21,9 @@ interface IndexAnalytics {
 }
 
 interface IndexAnalyticsOptions {
+  includeMarketCap?: boolean
   includeTotalSupply?: boolean
+  include24hrChange?: boolean
   include24hrVolume?: boolean
 }
 
@@ -47,11 +49,14 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
   async getAnalytics(
     address: string,
     options: IndexAnalyticsOptions = {
+      includeMarketCap: true,
       includeTotalSupply: true,
+      include24hrChange: true,
       include24hrVolume: true,
     },
   ): Promise<IndexAnalytics> {
     const { baseCurrency, chainId, coingeckoService, provider } = this
+    const supplyProvider = new IndexSupplyProvider(provider)
     const marketCapProvider = new IndexMarketCapProvider(
       provider,
       coingeckoService,
@@ -59,15 +64,17 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
     const navProvider = new IndexNavProvider(provider, coingeckoService)
 
     const supplyPromise = options.includeTotalSupply
-      ? new IndexSupplyProvider(provider).getSupply(address)
+      ? supplyProvider.getSupply(address)
       : null
-    const marketCapPromise = marketCapProvider.getMarketCap(address)
+    const marketCapPromise = options.includeMarketCap
+      ? marketCapProvider.getMarketCap(address)
+      : null
     const navPricePromise = navProvider.getNav(address)
     const coingeckoPromise = coingeckoService.getTokenPrice({
       address,
       chainId,
       baseCurrency,
-      include24hrChange: true,
+      include24hrChange: options.include24hrChange ?? false,
       include24hrVol: options.include24hrVolume ?? false,
     })
 
@@ -78,12 +85,16 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
         navPricePromise,
         coingeckoPromise,
       ])
-      const totalSupplyValue = totalSupply.status === 'fulfilled' ? totalSupply.value : null
+    const totalSupplyValue =
+      totalSupply.status === "fulfilled" ? totalSupply.value : null
     const coingeckoData =
       coingeckoRes.status === "fulfilled"
         ? coingeckoRes.value?.[address.toLowerCase()]
         : null
     const token = TokenData[address.toLowerCase()]
+
+    const change24hLabel = CoinGeckoUtils.get24hChangeLabel(baseCurrency)
+    const volume24hLabel = CoinGeckoUtils.get24hVolumeLabel(baseCurrency)
 
     return {
       symbol: token.symbol,
@@ -91,18 +102,14 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
       name: token.name,
       decimals: token.decimals,
       totalSupply:
-        options.includeTotalSupply && totalSupplyValue
+        totalSupplyValue
           ? utils.formatUnits(totalSupplyValue.toString())
           : null,
       marketPrice: coingeckoData?.[baseCurrency] ?? null,
       navPrice: navPrice.status === "fulfilled" ? navPrice.value : null,
       marketCap: marketCap.status === "fulfilled" ? marketCap.value : null,
-      change24h:
-        coingeckoData?.[CoinGeckoUtils.get24hChangeLabel(baseCurrency)] ?? null,
-      volume24h: options.include24hrVolume
-        ? coingeckoData?.[CoinGeckoUtils.get24hVolumeLabel(baseCurrency)] ??
-          null
-        : null,
+      change24h: coingeckoData?.[change24hLabel] ?? null,
+      volume24h: coingeckoData?.[volume24hLabel] ?? null,
     }
   }
 }
