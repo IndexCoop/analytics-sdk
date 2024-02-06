@@ -60,7 +60,7 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
 
     const supplyPromise = options.includeTotalSupply
       ? new IndexSupplyProvider(provider).getSupply(address)
-      : Promise.resolve(null)
+      : null
     const marketCapPromise = marketCapProvider.getMarketCap(address)
     const navPricePromise = navProvider.getNav(address)
     const coingeckoPromise = coingeckoService.getTokenPrice({
@@ -78,6 +78,7 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
         navPricePromise,
         coingeckoPromise,
       ])
+      const totalSupplyValue = totalSupply.status === 'fulfilled' ? totalSupply.value : null
     const coingeckoData =
       coingeckoRes.status === "fulfilled"
         ? coingeckoRes.value?.[address.toLowerCase()]
@@ -90,8 +91,8 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
       name: token.name,
       decimals: token.decimals,
       totalSupply:
-        options.includeTotalSupply && totalSupply
-          ? utils.formatUnits(totalSupply.toString())
+        options.includeTotalSupply && totalSupplyValue
+          ? utils.formatUnits(totalSupplyValue.toString())
           : null,
       marketPrice: coingeckoData?.[baseCurrency] ?? null,
       navPrice: navPrice.status === "fulfilled" ? navPrice.value : null,
