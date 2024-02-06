@@ -48,4 +48,31 @@ describe("IndexAnalyticsProvider", () => {
     expect(analyticsData.change24h).toEqual(change24h)
     expect(analyticsData.volume24h).toEqual(volume)
   })
+  test("returns minimum analytics data", async () => {
+    const address = "0x72e364F2ABdC788b7E918bc238B21f109Cd634D7" // MVI
+    const provider = new IndexAnalyticsProvider(rpcProvider, coingeckoService)
+    const analyticsData = await provider.getAnalytics(address, {})
+    const navPrice = await new IndexNavProvider(
+      rpcProvider,
+      coingeckoService,
+    ).getNav(address)
+    const coingeckoRes = await coingeckoService.getTokenPrice({
+      address,
+      chainId: 1,
+      baseCurrency: "usd",
+      include24hrChange: false,
+      include24hrVol: false,
+    })
+    const marketPrice = coingeckoRes[address.toLowerCase()]["usd"]
+    expect(analyticsData.address).toEqual(address)
+    expect(analyticsData.name).toEqual("Metaverse Index")
+    expect(analyticsData.symbol).toEqual("MVI")
+    expect(analyticsData.decimals).toEqual(18)
+    expect(analyticsData.marketPrice).toEqual(marketPrice)
+    expect(analyticsData.navPrice).toEqual(navPrice)
+    expect(analyticsData.marketCap).toEqual(null)
+    expect(analyticsData.totalSupply).toEqual(null)
+    expect(analyticsData.change24h).toEqual(null)
+    expect(analyticsData.volume24h).toEqual(null)
+  })
 })

@@ -1,7 +1,7 @@
 {
   "name": "@indexcoop/analytics-sdk",
   "description": "The AnalyticsSDK of the Index Coop.",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "engines": {
     "node": ">=18"
   },
@@ -36,6 +36,7 @@
     "build": "tsup src/index.ts --format cjs,esm --dts --clean --minify",
     "build:watch": "npm run build -- --watch src",
     "lint": "prettier -c . && eslint ./src",
+    "lint:fix": "prettier . --write && eslint ./src --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "release": "release-it"
