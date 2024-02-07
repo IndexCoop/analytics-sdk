@@ -1,7 +1,7 @@
 {
   "name": "@indexcoop/analytics-sdk",
   "description": "The AnalyticsSDK of the Index Coop.",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "engines": {
     "node": ">=18"
   },
