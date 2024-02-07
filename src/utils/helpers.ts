@@ -4,7 +4,7 @@ import { CoingeckoTokenPriceResponse } from "./coingecko"
 type SettledResponse = BigNumber | CoingeckoTokenPriceResponse | number | null
 
 // Returns the fulfilled value in case of success and otherwise
-// logs the reason for rejection
+// returns null and logs the reason for rejection
 export function getFulfilledValueOrNull(
   res: PromiseSettledResult<SettledResponse>,
 ): SettledResponse {
