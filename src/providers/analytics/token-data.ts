@@ -6,6 +6,7 @@ interface Token {
   symbol: string
 }
 
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 const btc2x = getIndexTokenData("BTC2X")!
 const eth2x = getIndexTokenData("ETH2X")!
 
