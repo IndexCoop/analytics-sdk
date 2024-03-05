@@ -20,6 +20,8 @@ npm test:watch
 
 When releasing a new index token make sure to add it to the [tvl provider](./src/providers/tvl/provider.ts). So that the provider reflects the total TVL over all Index's products.
 
+Additionally, make sure it's added in the [static token data](./src/providers/analytics/token-data.ts).
+
 ## Examples
 
 Each indicator has its own [provider](./src/providers/). The following indicators are currently provided and return the according data for an Index token.
