@@ -61,6 +61,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@indexcoop/tokenlists": "1.38.0",
     "ethers": "5.7.2"
   }
 }

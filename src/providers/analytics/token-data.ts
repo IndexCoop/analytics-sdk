@@ -1,10 +1,20 @@
+import { getIndexTokenData } from "@indexcoop/tokenlists"
+
 interface Token {
   decimals: number
   name: string
   symbol: string
 }
 
+const btc2x = getIndexTokenData("BTC2X")!
+const eth2x = getIndexTokenData("ETH2X")!
+
+// TODO: might be able to use tokenlists here in the future
+// Add addresses lowercased!!
 export const TokenData: { [key: string]: Token } = {
+  "0xd2ac55ca3bbd2dd1e9936ec640dcb4b745fde759": {
+    ...btc2x,
+  },
   "0x2aF1dF3AB0ab157e1E2Ad8F88A7D04fbea0c7dc6": {
     decimals: 18,
     name: "Bankless BED Index",
@@ -29,6 +39,9 @@ export const TokenData: { [key: string]: Token } = {
     decimals: 18,
     name: "Diversified Staked ETH Index",
     symbol: "dsETH",
+  },
+  "0x65c4c0517025ec0843c9146af266a2c5a2d148a2": {
+    ...eth2x,
   },
   "0xaa6e8127831c9de45ae56bb1b0d4d4da6e5665bd": {
     decimals: 18,
