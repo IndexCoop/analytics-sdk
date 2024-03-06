@@ -22,6 +22,12 @@ When releasing a new index token make sure to add it to the [tvl provider](./src
 
 Additionally, make sure it's added in the [static token data](./src/providers/analytics/token-data.ts).
 
+### New components for an index token
+
+Make sure to check the different custom providers for necessary changes e.g.
+
+- add/update components for ic21 in the [nav provider](./src/providers/nav/ic21.ts)
+
 ## Examples
 
 Each indicator has its own [provider](./src/providers/). The following indicators are currently provided and return the according data for an Index token.
