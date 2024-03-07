@@ -1,5 +1,13 @@
 import { CoinGeckoService, CoinGeckoUtils } from "../../utils/"
 
+interface TokenStatsResponse {
+  symbol: string
+  price: number
+  change24h: number
+  low: number
+  high: number
+}
+
 function getCoingeckoId(symbol: string) {
   switch (symbol) {
     case "BTC":
@@ -12,8 +20,7 @@ function getCoingeckoId(symbol: string) {
 export class CoingeckoProvider {
   constructor(private readonly coingeckoService: CoinGeckoService) {}
 
-  // TODO: define response
-  async getTokenStats(symbol: string): Promise<any> {
+  async getTokenStats(symbol: string): Promise<TokenStatsResponse> {
     const { coingeckoService } = this
     const baseCurrency = "usd"
     const coinId = getCoingeckoId(symbol)
@@ -23,13 +30,23 @@ export class CoingeckoProvider {
         baseCurrency,
       })
     )[coinId]
+    const historicData24h = (
+      await coingeckoService.getHistoricalChartDataById({
+        coinId,
+        baseCurrency,
+      })
+    ).prices
     const change24h =
       simplePriceData[CoinGeckoUtils.get24hChangeLabel(baseCurrency)]
-    const price = simplePriceData[baseCurrency]
+    const prices = historicData24h.map((price) => price[1]) // Extract prices
+    const low = Math.min(...prices)
+    const high = Math.max(...prices)
     return {
       symbol,
-      price,
+      price: simplePriceData[baseCurrency],
       change24h,
+      low,
+      high,
     }
   }
 }
