@@ -61,7 +61,7 @@ export class CoinGeckoService {
   ): Promise<CoingeckoTokenPriceResponse> {
     const path = `simple/price/?vs_currencies=${
       req.baseCurrency
-    }&ids=${req.ids.toString()}`
+    }&ids=${req.ids.toString()}&include_24hr_change=true`
     const res = await this.GET(path)
     return await res.json()
   }
