@@ -55,7 +55,7 @@ export class CoinGeckoService {
   async getHistoricalChartDataById(
     req: CoingeckoGetHistoricalChartDataByIdRequest,
   ): Promise<CoingeckoHistoricalChartDataByIdResponse> {
-    let path = `coins/${req.coinId}/market_chart?vs_currency=${req.baseCurrency}&days=1`
+    const path = `coins/${req.coinId}/market_chart?vs_currency=${req.baseCurrency}&days=1`
     const res = await this.GET(path)
     return await res.json()
   }
