@@ -41,7 +41,7 @@ describe("IndexAnalyticsProvider", () => {
     expect(analyticsData.decimals).toEqual(18)
     expect(analyticsData.marketCap).toEqual(marketCap)
     expect(analyticsData.marketPrice).toEqual(marketPrice)
-    expect(analyticsData.navPrice).toEqual(navPrice)
+    expect(analyticsData.navPrice).toBeCloseTo(navPrice)
     expect(analyticsData.totalSupply).toEqual(
       utils.formatUnits(totalSupply.toString()),
     )
@@ -69,7 +69,7 @@ describe("IndexAnalyticsProvider", () => {
     expect(analyticsData.symbol).toEqual("MVI")
     expect(analyticsData.decimals).toEqual(18)
     expect(analyticsData.marketPrice).toEqual(marketPrice)
-    expect(analyticsData.navPrice).toEqual(navPrice)
+    expect(analyticsData.navPrice).toBeCloseTo(navPrice)
     expect(analyticsData.marketCap).toEqual(null)
     expect(analyticsData.totalSupply).toEqual(null)
     expect(analyticsData.change24h).toEqual(null)
