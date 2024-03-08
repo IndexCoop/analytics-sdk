@@ -12,8 +12,8 @@ describe("CoingeckoProvider", () => {
     expect(data.symbol).toBe("ETH")
     expect(data.price).toBeGreaterThan(0)
     expect(data.change24h).toBeGreaterThan(0)
-    expect(data.low).toBeGreaterThan(0)
-    expect(data.high).toBeGreaterThan(0)
+    expect(data.low24h).toBeGreaterThan(0)
+    expect(data.high24h).toBeGreaterThan(0)
   })
 
   test("returns token data for BTC", async () => {
@@ -23,7 +23,7 @@ describe("CoingeckoProvider", () => {
     expect(data.symbol).toBe("BTC")
     expect(data.price).toBeGreaterThan(0)
     expect(data.change24h).toBeGreaterThan(0)
-    expect(data.low).toBeGreaterThan(0)
-    expect(data.high).toBeGreaterThan(0)
+    expect(data.low24h).toBeGreaterThan(0)
+    expect(data.high24h).toBeGreaterThan(0)
   })
 })

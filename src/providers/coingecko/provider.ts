@@ -4,8 +4,8 @@ interface TokenStatsResponse {
   symbol: string
   price: number
   change24h: number
-  low: number
-  high: number
+  low24h: number
+  high24h: number
 }
 
 function getCoingeckoId(symbol: string) {
@@ -39,14 +39,12 @@ export class CoingeckoProvider {
     const change24h =
       simplePriceData[CoinGeckoUtils.get24hChangeLabel(baseCurrency)]
     const prices = historicData24h.map((price) => price[1]) // Extract prices
-    const low = Math.min(...prices)
-    const high = Math.max(...prices)
     return {
       symbol,
       price: simplePriceData[baseCurrency],
       change24h,
-      low,
-      high,
+      low24h: Math.min(...prices),
+      high24h: Math.max(...prices),
     }
   }
 }
