@@ -17,6 +17,18 @@ export type FindPricesResponse = {
   [key: string]: CurrencyCodePriceMap
 }
 
+export type CoingeckoGetHistoricalChartDataByIdRequest = {
+  // A supported currency e.g. 'usd' or 'eur'
+  baseCurrency: string
+  coinId: string
+}
+
+export type CoingeckoHistoricalChartDataByIdResponse = {
+  prices: number[][]
+  market_caps: number[][]
+  total_volumes: number[][]
+}
+
 export type CoingeckoTokenPriceRequest = {
   address: string
   chainId: ChainId
@@ -40,6 +52,13 @@ export type CoingeckoTokenPriceResponse = {
 export class CoinGeckoService {
   private readonly host = "https://pro-api.coingecko.com/api/v3"
   constructor(private readonly apiKey: string) {}
+  async getHistoricalChartDataById(
+    req: CoingeckoGetHistoricalChartDataByIdRequest,
+  ): Promise<CoingeckoHistoricalChartDataByIdResponse> {
+    const path = `coins/${req.coinId}/market_chart?vs_currency=${req.baseCurrency}&days=1`
+    const res = await this.GET(path)
+    return await res.json()
+  }
 
   async getTokenPrice(
     req: CoingeckoTokenPriceRequest,
@@ -61,7 +80,7 @@ export class CoinGeckoService {
   ): Promise<CoingeckoTokenPriceResponse> {
     const path = `simple/price/?vs_currencies=${
       req.baseCurrency
-    }&ids=${req.ids.toString()}`
+    }&ids=${req.ids.toString()}&include_24hr_change=true`
     const res = await this.GET(path)
     return await res.json()
   }
