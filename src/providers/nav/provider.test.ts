@@ -1,7 +1,7 @@
 import { BigNumber, Contract, utils } from "ethers"
 
 import { buildAlchemyProvider, CoinGeckoService } from "../../utils"
-import { Eth2xFliNavProvider } from "./eth2xfli"
+import { FliNavProvider } from "./fli-nav-provider"
 import { IndexNavProvider } from "./provider"
 import { Ic21NavProvider } from "./ic21"
 
@@ -17,10 +17,19 @@ describe("IndexSupplyProvider", () => {
     await expect(nav).toBeGreaterThan(0)
   })
 
+  test("returns the NAV for BTC2xFLI", async () => {
+    const btc2xfli = "0x0B498ff89709d3838a063f1dFA463091F9801c2b"
+    const fliNavProvider = new FliNavProvider(rpcProvider, coingeckoService)
+    const expectedNav = await fliNavProvider.getNav(btc2xfli)
+    const provider = new IndexNavProvider(rpcProvider, coingeckoService)
+    const nav = await provider.getNav(btc2xfli)
+    await expect(nav).toBeCloseTo(expectedNav)
+  })
+
   test("returns the NAV for ETH2xFLI", async () => {
     const eth2xfli = "0xAa6E8127831c9DE45ae56bB1b0d4D4Da6e5665BD"
-    const eth2xProvider = new Eth2xFliNavProvider(rpcProvider, coingeckoService)
-    const expectedNav = await eth2xProvider.getNav()
+    const fliNavProvider = new FliNavProvider(rpcProvider, coingeckoService)
+    const expectedNav = await fliNavProvider.getNav(eth2xfli)
     const provider = new IndexNavProvider(rpcProvider, coingeckoService)
     const nav = await provider.getNav(eth2xfli)
     await expect(nav).toBeCloseTo(expectedNav)
