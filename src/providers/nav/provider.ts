@@ -1,7 +1,7 @@
 import { BigNumber, Contract, providers, utils } from "ethers"
 
 import { CoinGeckoService, FindPricesResponse } from "utils/coingecko"
-import { Eth2xFliNavProvider } from "./eth2xfli"
+import { FliNavProvider } from "./fli-nav-provider"
 import { IcSmmtNavProvider } from "./icsmmt"
 import { Ic21NavProvider } from "./ic21"
 
@@ -14,6 +14,7 @@ interface Position {
   unit: BigNumber
 }
 
+const btc2xfli = "0x0B498ff89709d3838a063f1dFA463091F9801c2b"
 const eth2xfli = "0xAa6E8127831c9DE45ae56bB1b0d4D4Da6e5665BD"
 const ic21 = "0x1B5E16C5b20Fb5EE87C61fE9Afe735Cca3B21A65"
 const icSMMT = "0xc30FBa978743a43E736fc32FBeEd364b8A2039cD"
@@ -31,13 +32,13 @@ export class IndexNavProvider implements NavProvider {
     const { baseCurrency, coingeckoService, provider } = this
     const network = await provider.getNetwork()
     const chainId = network.chainId
-    // ETH2xFLI specific
-    if (address.toLowerCase() === eth2xfli.toLowerCase()) {
-      const eth2xfliProvider = new Eth2xFliNavProvider(
-        provider,
-        coingeckoService,
-      )
-      const nav = await eth2xfliProvider.getNav()
+    // FLI specific
+    if (
+      address.toLowerCase() === eth2xfli.toLowerCase() ||
+      address.toLowerCase() === btc2xfli.toLowerCase()
+    ) {
+      const fliNavProvider = new FliNavProvider(provider, coingeckoService)
+      const nav = await fliNavProvider.getNav(address)
       return nav
     }
     // ic21 specific calculation
