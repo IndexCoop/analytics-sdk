@@ -9,6 +9,7 @@ interface Token {
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 const btc2x = getIndexTokenData("BTC2X")!
 const eth2x = getIndexTokenData("ETH2X")!
+const hyeth = getIndexTokenData("HYETH")!
 
 // TODO: might be able to use tokenlists here in the future
 // Add addresses lowercased!!
@@ -69,4 +70,5 @@ export const TokenData: { [key: string]: Token } = {
     name: "Metaverse Index",
     symbol: "MVI",
   },
+  [hyeth.address.toLowerCase()]: hyeth,
 }
