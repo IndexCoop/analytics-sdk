@@ -42,6 +42,7 @@ jobs:
           node-version-file: ".nvmrc"
           cache: "npm"
       - run: npm ci
+      - run: npm run build
       - name: Release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
