@@ -7,6 +7,7 @@ interface Token {
 }
 
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+const bed = getIndexTokenData("BED")!
 const btc2x = getIndexTokenData("BTC2X")!
 const eth2x = getIndexTokenData("ETH2X")!
 const hyeth = getIndexTokenData("HYETH")!
@@ -16,11 +17,6 @@ const hyeth = getIndexTokenData("HYETH")!
 export const TokenData: { [key: string]: Token } = {
   "0xd2ac55ca3bbd2dd1e9936ec640dcb4b745fde759": {
     ...btc2x,
-  },
-  "0x2aF1dF3AB0ab157e1E2Ad8F88A7D04fbea0c7dc6": {
-    decimals: 18,
-    name: "Bankless BED Index",
-    symbol: "BED",
   },
   "0x0b498ff89709d3838a063f1dfa463091f9801c2b": {
     decimals: 18,
@@ -70,5 +66,6 @@ export const TokenData: { [key: string]: Token } = {
     name: "Metaverse Index",
     symbol: "MVI",
   },
+  [bed.address.toLowerCase()]: bed,
   [hyeth.address.toLowerCase()]: hyeth,
 }
