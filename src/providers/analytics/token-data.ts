@@ -66,6 +66,6 @@ export const TokenData: { [key: string]: Token } = {
     name: "Metaverse Index",
     symbol: "MVI",
   },
-  [bed.symbol.toLowerCase()]: bed,
+  [bed.address.toLowerCase()]: bed,
   [hyeth.address.toLowerCase()]: hyeth,
 }
