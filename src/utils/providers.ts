@@ -1,13 +1,17 @@
 import { providers } from "ethers"
 
+import { ChainId } from "../constants"
+
 export function getAlchemySubdomain(chainId: number): string | null {
   switch (chainId) {
-    case 1:
+    case ChainId.Mainnet:
       return "eth"
-    case 10:
+    case ChainId.Optimism:
       return "opt"
-    case 137:
+    case ChainId.Polygon:
       return "polygon"
+    case ChainId.Arbitrum:
+      return "arb"
     default:
       return null
   }

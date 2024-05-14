@@ -109,6 +109,8 @@ export class CoinGeckoService {
 
   private getAssetPlatform(chainId: ChainId): string {
     switch (chainId) {
+      case ChainId.Arbitrum:
+        return "arbitrum-one"
       case ChainId.Mainnet:
         return "ethereum"
       case ChainId.Optimism:
