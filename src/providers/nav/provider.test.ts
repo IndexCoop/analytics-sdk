@@ -67,7 +67,7 @@ describe("IndexSupplyProvider (Mainnet)", () => {
 
 describe("IndexSupplyProvider (Arbitrum)", () => {
   test("returns the NAV for BTC2X", async () => {
-    const btc2x = "0xfa69F1e2e48B411b98a105fb693fb381764Dc857"
+    const btc2x = "0xeb5bE62e6770137beaA0cC712741165C594F59D7"
     const provider = new IndexNavProvider(rpcProviderArbitrum, coingeckoService)
     const nav = await provider.getNav(btc2x)
     console.log(nav)
@@ -75,7 +75,7 @@ describe("IndexSupplyProvider (Arbitrum)", () => {
   })
 
   test("returns the NAV for BTC3X", async () => {
-    const btc3x = "0x53765a7cF4933bc939e32fA560FFf3D8E1d63473"
+    const btc3x = "0x3bDd0d5c0C795b2Bf076F5C8F177c58e42beC0E6"
     const provider = new IndexNavProvider(rpcProviderArbitrum, coingeckoService)
     const nav = await provider.getNav(btc3x)
     console.log(nav)
@@ -83,7 +83,7 @@ describe("IndexSupplyProvider (Arbitrum)", () => {
   })
 
   test("returns the NAV for ETH2X", async () => {
-    const eth2x = "0x67d2373f0321Cd24a1b58e3c81fC1b6Ef15B205C"
+    const eth2x = "0x26d7D3728C6bb762a5043a1d0CeF660988Bca43C"
     const provider = new IndexNavProvider(rpcProviderArbitrum, coingeckoService)
     const nav = await provider.getNav(eth2x)
     console.log(nav)
@@ -91,7 +91,7 @@ describe("IndexSupplyProvider (Arbitrum)", () => {
   })
 
   test("returns the NAV for ETH3X", async () => {
-    const eth3x = "0x0bef95Cc308027C9a754D7674DE0844AE1dcD5b1"
+    const eth3x = "0xA0A17b2a015c14BE846C5d309D076379cCDfa543"
     const provider = new IndexNavProvider(rpcProviderArbitrum, coingeckoService)
     const nav = await provider.getNav(eth3x)
     console.log(nav)
@@ -99,7 +99,7 @@ describe("IndexSupplyProvider (Arbitrum)", () => {
   })
 
   test("returns the NAV for iBTC1X", async () => {
-    const ibtc1x = "0xCaD2B03e289260cCF59209CF059778342d1Cf33b"
+    const ibtc1x = "0x80e58AEA88BCCaAE19bCa7f0e420C1387Cc087fC"
     const provider = new IndexNavProvider(rpcProviderArbitrum, coingeckoService)
     const nav = await provider.getNav(ibtc1x)
     console.log(nav)
@@ -107,7 +107,7 @@ describe("IndexSupplyProvider (Arbitrum)", () => {
   })
 
   test("returns the NAV for iETH1X", async () => {
-    const ieth1x = "0xaa61DDA963d0Cf89dA3C13FE635C84a1B8B6B988"
+    const ieth1x = "0x749654601a286833aD30357246400D2933b1C89b"
     const provider = new IndexNavProvider(rpcProviderArbitrum, coingeckoService)
     const nav = await provider.getNav(ieth1x)
     console.log(nav)
