@@ -2,6 +2,7 @@ import { BigNumber, Contract, providers, utils } from "ethers"
 
 import { CoinGeckoService, FindPricesResponse } from "utils/coingecko"
 import { FliNavProvider } from "./fli-nav-provider"
+import { HyEthNavProvider } from "./hyeth"
 import { IcSmmtNavProvider } from "./icsmmt"
 import { Ic21NavProvider } from "./ic21"
 
@@ -16,6 +17,7 @@ interface Position {
 
 const btc2xfli = "0x0B498ff89709d3838a063f1dFA463091F9801c2b"
 const eth2xfli = "0xAa6E8127831c9DE45ae56bB1b0d4D4Da6e5665BD"
+const hyETH = "0xc4506022Fb8090774E8A628d5084EED61D9B99Ee"
 const ic21 = "0x1B5E16C5b20Fb5EE87C61fE9Afe735Cca3B21A65"
 const icSMMT = "0xc30FBa978743a43E736fc32FBeEd364b8A2039cD"
 
@@ -39,6 +41,12 @@ export class IndexNavProvider implements NavProvider {
     ) {
       const fliNavProvider = new FliNavProvider(provider, coingeckoService)
       const nav = await fliNavProvider.getNav(address)
+      return nav
+    }
+    // hyETH specific calculation
+    if (address.toLowerCase() === hyETH.toLowerCase()) {
+      const hyEthProvider = new HyEthNavProvider(provider, coingeckoService)
+      const nav = await hyEthProvider.getNav()
       return nav
     }
     // ic21 specific calculation
