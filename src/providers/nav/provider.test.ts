@@ -77,7 +77,6 @@ describe("IndexSupplyProvider (Arbitrum)", () => {
     const btc2x = "0xeb5bE62e6770137beaA0cC712741165C594F59D7"
     const provider = new IndexNavProvider(rpcProviderArbitrum, coingeckoService)
     const nav = await provider.getNav(btc2x)
-    console.log(nav)
     await expect(nav).toBeGreaterThan(0)
   })
 
@@ -85,7 +84,6 @@ describe("IndexSupplyProvider (Arbitrum)", () => {
     const btc3x = "0x3bDd0d5c0C795b2Bf076F5C8F177c58e42beC0E6"
     const provider = new IndexNavProvider(rpcProviderArbitrum, coingeckoService)
     const nav = await provider.getNav(btc3x)
-    console.log(nav)
     await expect(nav).toBeGreaterThan(0)
   })
 
@@ -93,7 +91,6 @@ describe("IndexSupplyProvider (Arbitrum)", () => {
     const eth2x = "0x26d7D3728C6bb762a5043a1d0CeF660988Bca43C"
     const provider = new IndexNavProvider(rpcProviderArbitrum, coingeckoService)
     const nav = await provider.getNav(eth2x)
-    console.log(nav)
     await expect(nav).toBeGreaterThan(0)
   })
 
@@ -101,7 +98,6 @@ describe("IndexSupplyProvider (Arbitrum)", () => {
     const eth3x = "0xA0A17b2a015c14BE846C5d309D076379cCDfa543"
     const provider = new IndexNavProvider(rpcProviderArbitrum, coingeckoService)
     const nav = await provider.getNav(eth3x)
-    console.log(nav)
     await expect(nav).toBeGreaterThan(0)
   })
 
@@ -109,7 +105,6 @@ describe("IndexSupplyProvider (Arbitrum)", () => {
     const ibtc1x = "0x80e58AEA88BCCaAE19bCa7f0e420C1387Cc087fC"
     const provider = new IndexNavProvider(rpcProviderArbitrum, coingeckoService)
     const nav = await provider.getNav(ibtc1x)
-    console.log(nav)
     await expect(nav).toBeGreaterThan(0)
   })
 
@@ -117,7 +112,6 @@ describe("IndexSupplyProvider (Arbitrum)", () => {
     const ieth1x = "0x749654601a286833aD30357246400D2933b1C89b"
     const provider = new IndexNavProvider(rpcProviderArbitrum, coingeckoService)
     const nav = await provider.getNav(ieth1x)
-    console.log(nav)
     await expect(nav).toBeGreaterThan(0)
   })
 })

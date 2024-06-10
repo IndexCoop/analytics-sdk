@@ -103,7 +103,6 @@ export class HyEthNavProvider {
       baseCurrency,
     })
     const ethPrice = results[ethCoingeckoId].usd
-    console.log(ethPrice, "ETH")
     const denominations = await this.getEthDenominations(positions)
     const usdValues = denominations.map((den: BigNumber, index: number) => {
       const unit = utils.formatUnits(den, 18)
