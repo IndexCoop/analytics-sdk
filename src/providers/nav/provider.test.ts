@@ -40,6 +40,13 @@ describe("IndexSupplyProvider (Mainnet)", () => {
     await expect(nav).toBeCloseTo(expectedNav)
   })
 
+  test("returns the NAV for hyETH", async () => {
+    const hyeth = "0xc4506022Fb8090774E8A628d5084EED61D9B99Ee"
+    const provider = new IndexNavProvider(rpcProvider, coingeckoService)
+    const nav = await provider.getNav(hyeth)
+    await expect(nav).toBeGreaterThan(0)
+  })
+
   test("returns the NAV for ic21", async () => {
     const ic21 = "0x1B5E16C5b20Fb5EE87C61fE9Afe735Cca3B21A65"
     const ic21NavProvider = new Ic21NavProvider(rpcProvider, coingeckoService)
