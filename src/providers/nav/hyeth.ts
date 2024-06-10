@@ -2,7 +2,7 @@ import { BigNumber, Contract, providers, utils } from "ethers"
 
 import { CoinGeckoService } from "utils/coingecko"
 import { isSameAddress } from "../../utils/addresses"
-import { getDecimals } from "../../utils/erc20"
+// import { getDecimals } from "../../utils/erc20"
 import { getPositions } from "../../utils/positions"
 
 interface Position {
@@ -46,7 +46,7 @@ export class HyEthNavProvider {
     const contract = new Contract(acrossPool, abi, this.provider)
     const exchangeRate: BigNumber =
       await contract.callStatic.exchangeRateCurrent(this.weth)
-    const roundingError = BigInt(10)
+    // const roundingError = BigInt(10)
     const ethAmount = exchangeRate
       .mul(unit)
       .div(BigNumber.from("1000000000000000000")) // .add(roundingError)
@@ -93,7 +93,7 @@ export class HyEthNavProvider {
     const { baseCurrency, provider } = this
     const hyeth = "0xc4506022Fb8090774E8A628d5084EED61D9B99Ee"
     const positions: Position[] = await getPositions(hyeth, provider)
-    const components = positions.map((p) => p.component)
+    // const components = positions.map((p) => p.component)
     // const decimalsPromises = components.map((c) => getDecimals(c, provider))
     // const decimals = await Promise.all(decimalsPromises)
     // console.log(decimals)
@@ -104,7 +104,7 @@ export class HyEthNavProvider {
     })
     const ethPrice = results[ethCoingeckoId].usd
     const denominations = await this.getEthDenominations(positions)
-    const usdValues = denominations.map((den: BigNumber, index: number) => {
+    const usdValues = denominations.map((den: BigNumber) => {
       const unit = utils.formatUnits(den, 18)
       return Number(unit) * ethPrice
     })
