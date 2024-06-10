@@ -5,6 +5,12 @@ import { isSameAddress } from "../../utils/addresses"
 // import { getDecimals } from "../../utils/erc20"
 import { getPositions } from "../../utils/positions"
 
+interface Component {
+  address: string
+  unit: string
+  usd: number
+}
+
 interface Position {
   component: string
   unit: BigNumber
@@ -89,7 +95,7 @@ export class HyEthNavProvider {
     return ethAmount
   }
 
-  async getNav(): Promise<number> {
+  async getComponentsUnitsPrices(): Promise<Component[]> {
     const { baseCurrency, provider } = this
     const hyeth = "0xc4506022Fb8090774E8A628d5084EED61D9B99Ee"
     const positions: Position[] = await getPositions(hyeth, provider)
@@ -108,7 +114,20 @@ export class HyEthNavProvider {
       const unit = utils.formatUnits(den, 18)
       return Number(unit) * ethPrice
     })
-    const nav = usdValues.reduce((prev, curr) => curr + prev, 0)
+    const components = positions.map((position: Position, index: number) => {
+      const usd = usdValues[index]
+      return {
+        address: position.component,
+        unit: position.unit.toString(),
+        usd,
+      }
+    })
+    return components
+  }
+
+  async getNav(): Promise<number> {
+    const components = await this.getComponentsUnitsPrices()
+    const nav = components.reduce((prev, curr) => curr.usd + prev, 0)
     return nav
   }
 
