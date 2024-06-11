@@ -1,7 +1,11 @@
-import { BigNumber, Contract, utils } from "ethers"
+import { BigNumber, utils } from "ethers"
 
 import { ChainId } from "../../constants"
-import { buildAlchemyProvider, CoinGeckoService } from "../../utils"
+import {
+  buildAlchemyProvider,
+  CoinGeckoService,
+  getPositions,
+} from "../../utils"
 import { FliNavProvider } from "./fli-nav-provider"
 import { IndexNavProvider } from "./provider"
 import { Ic21NavProvider } from "./ic21"
@@ -122,8 +126,7 @@ interface Position {
 }
 
 async function getNav(address: string, chainId: number) {
-  const contract = new Contract(address, indexTokenAbi, rpcProvider)
-  const positions = await contract.getPositions()
+  const positions = await getPositions(address, rpcProvider)
   const positionPrices = await coingeckoService.findPrices({
     addresses: positions.map((p: Position) => p.component),
     chainId,
@@ -138,26 +141,3 @@ async function getNav(address: string, chainId: number) {
   const nav = usdValues.reduce((prev: number, curr: number) => curr + prev, 0)
   return nav
 }
-
-const indexTokenAbi = [
-  {
-    inputs: [],
-    name: "getPositions",
-    outputs: [
-      {
-        components: [
-          { internalType: "address", name: "component", type: "address" },
-          { internalType: "address", name: "module", type: "address" },
-          { internalType: "int256", name: "unit", type: "int256" },
-          { internalType: "uint8", name: "positionState", type: "uint8" },
-          { internalType: "bytes", name: "data", type: "bytes" },
-        ],
-        internalType: "struct ISetToken.Position[]",
-        name: "",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-]

@@ -1,4 +1,4 @@
-import { BigNumber, Contract, providers, utils } from "ethers"
+import { BigNumber, providers, utils } from "ethers"
 
 import { CoinGeckoService } from "utils/coingecko"
 import { getDecimals } from "../../utils/erc20"
@@ -8,8 +8,6 @@ type Position = {
   component: string
   unit: BigNumber
 }
-
-const Erc20Abi = ["function decimals() public view returns (uint8)"]
 
 const mappingAddressCoingeckoId: { [key: string]: string } = {
   "0x399508A43d7E2b4451cd344633108b4d84b33B03": "avalanche-2",
