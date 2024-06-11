@@ -4,14 +4,14 @@ import { ChainId } from "../constants"
 
 export function getAlchemySubdomain(chainId: number): string | null {
   switch (chainId) {
+    case ChainId.Arbitrum:
+      return "arb"
     case ChainId.Mainnet:
       return "eth"
     case ChainId.Optimism:
       return "opt"
     case ChainId.Polygon:
       return "polygon"
-    case ChainId.Arbitrum:
-      return "arb"
     default:
       return null
   }
