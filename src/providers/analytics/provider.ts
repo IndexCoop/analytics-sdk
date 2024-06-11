@@ -50,7 +50,7 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
 
   async getAnalytics(
     address: string,
-    chainId: number = 1,
+    chainId = 1,
     options: IndexAnalyticsOptions = {
       includeMarketCap: true,
       includeTotalSupply: true,
