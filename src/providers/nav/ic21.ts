@@ -1,14 +1,13 @@
-import { BigNumber, Contract, providers, utils } from "ethers"
+import { BigNumber, providers, utils } from "ethers"
 
 import { CoinGeckoService } from "utils/coingecko"
+import { getDecimals } from "../../utils/erc20"
 import { getPositions } from "../../utils/positions"
 
 type Position = {
   component: string
   unit: BigNumber
 }
-
-const Erc20Abi = ["function decimals() public view returns (uint8)"]
 
 const mappingAddressCoingeckoId: { [key: string]: string } = {
   "0x399508A43d7E2b4451cd344633108b4d84b33B03": "avalanche-2",
@@ -40,7 +39,7 @@ export class Ic21NavProvider {
     const ic21 = "0x1B5E16C5b20Fb5EE87C61fE9Afe735Cca3B21A65"
     const positions: Position[] = await getPositions(ic21, provider)
     const components = positions.map((p) => p.component)
-    const decimalsPromises = components.map((c) => this.getDecimals(c))
+    const decimalsPromises = components.map((c) => getDecimals(c, provider))
     const decimals = await Promise.all(decimalsPromises)
     const prices = await this.getPrices(positions)
     const usdValues = positions.map((p: Position, index: number) => {
@@ -51,12 +50,6 @@ export class Ic21NavProvider {
     })
     const nav = usdValues.reduce((prev, curr) => curr + prev, 0)
     return nav
-  }
-
-  private async getDecimals(address: string) {
-    const contract = new Contract(address, Erc20Abi, this.provider)
-    const decimals = await contract.decimals()
-    return decimals
   }
 
   private async getPrices(positions: Position[]) {

@@ -1,6 +1,7 @@
 import { BigNumber, Contract, providers, utils } from "ethers"
 
 import { CoinGeckoService, FindPricesResponse } from "utils/coingecko"
+import { getPositions } from "../../utils/positions"
 
 const icSMMT = "0xc30FBa978743a43E736fc32FBeEd364b8A2039cD"
 
@@ -30,8 +31,7 @@ export class IcSmmtNavProvider {
       baseCurrency: "usd",
       includeDailyChange: false,
     })
-    const mmitContract = new Contract(icSMMT, indexTokenAbi, provider)
-    const positions = await mmitContract.getPositions()
+    const positions = await getPositions(icSMMT, provider)
     const navPromises = positions.map((pos: Position) =>
       this.getPositionNav(pos.component, pos.unit, prices, provider),
     )
@@ -69,27 +69,4 @@ const erc4626Abi = [
   "function decimals() view returns (uint256)",
   "function totalAssets() view returns (uint256)",
   "function totalSupply() view returns (uint256)",
-]
-
-const indexTokenAbi = [
-  {
-    inputs: [],
-    name: "getPositions",
-    outputs: [
-      {
-        components: [
-          { internalType: "address", name: "component", type: "address" },
-          { internalType: "address", name: "module", type: "address" },
-          { internalType: "int256", name: "unit", type: "int256" },
-          { internalType: "uint8", name: "positionState", type: "uint8" },
-          { internalType: "bytes", name: "data", type: "bytes" },
-        ],
-        internalType: "struct ISetToken.Position[]",
-        name: "",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
 ]

@@ -1,16 +1,16 @@
-import { providers, utils } from "ethers"
+import { utils } from "ethers"
+import { getIndexTokenDataByAddress } from "@indexcoop/tokenlists"
 
 import {
   CoinGeckoService,
   CoinGeckoUtils,
   CoingeckoTokenPriceResponse,
   getFulfilledValueOrNull,
+  getRpcProvider,
 } from "../../utils"
 import { IndexMarketCapProvider } from "../marketcap"
 import { IndexNavProvider } from "../nav"
 import { IndexSupplyProvider } from "../supply"
-
-import { TokenData } from "./token-data"
 
 interface IndexAnalytics {
   name: string
@@ -35,24 +35,22 @@ interface IndexAnalyticsOptions {
 interface AnalyticsProvider {
   getAnalytics(
     address: string,
+    chainId: number,
     options?: IndexAnalyticsOptions,
   ): Promise<IndexAnalytics>
 }
 
 export class IndexAnalyticsProvider implements AnalyticsProvider {
   private baseCurrency = "usd"
-  // For now we can save time by always assuming Ethereum
-  private chainId = 1
 
   constructor(
-    private readonly provider:
-      | providers.JsonRpcProvider
-      | providers.StaticJsonRpcProvider,
     private readonly coingeckoService: CoinGeckoService,
+    private readonly rpcUrl: string,
   ) {}
 
   async getAnalytics(
     address: string,
+    chainId = 1,
     options: IndexAnalyticsOptions = {
       includeMarketCap: true,
       includeTotalSupply: true,
@@ -60,7 +58,13 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
       include24hrVolume: true,
     },
   ): Promise<IndexAnalytics> {
-    const { baseCurrency, chainId, coingeckoService, provider } = this
+    const token = getIndexTokenDataByAddress(address, chainId)
+    if (!token) {
+      throw new Error("Unknown index token or wrong chainId")
+    }
+
+    const provider = getRpcProvider(this.rpcUrl)
+    const { baseCurrency, coingeckoService } = this
     const supplyProvider = new IndexSupplyProvider(provider)
     const marketCapProvider = new IndexMarketCapProvider(
       provider,
@@ -96,7 +100,6 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
         coingeckoRes,
       ) as CoingeckoTokenPriceResponse | null
     )?.[address.toLowerCase()]
-    const token = TokenData[address.toLowerCase()]
 
     const change24hLabel = CoinGeckoUtils.get24hChangeLabel(baseCurrency)
     const volume24hLabel = CoinGeckoUtils.get24hVolumeLabel(baseCurrency)
