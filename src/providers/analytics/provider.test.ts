@@ -1,6 +1,10 @@
 import { utils } from "ethers"
 
-import { buildAlchemyProvider, CoinGeckoService } from "../../utils"
+import {
+  buildAlchemyProvider,
+  buildAlchemyProviderUrl,
+  CoinGeckoService,
+} from "../../utils"
 import { IndexMarketCapProvider } from "../marketcap"
 import { IndexNavProvider } from "../nav"
 import { IndexSupplyProvider } from "../supply"
@@ -9,11 +13,12 @@ import { IndexAnalyticsProvider } from "./provider"
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 const coingeckoService = new CoinGeckoService(process.env.COINGECKO_API_KEY!)
 const rpcProvider = buildAlchemyProvider(1, process.env.ALCHEMY_API_KEY!)
+const rpcUrl = buildAlchemyProviderUrl(1, process.env.ALCHEMY_API_KEY!)
 
 describe("IndexAnalyticsProvider", () => {
   test("returns complete analytics data", async () => {
     const address = "0x72e364F2ABdC788b7E918bc238B21f109Cd634D7" // MVI
-    const provider = new IndexAnalyticsProvider(rpcProvider, coingeckoService)
+    const provider = new IndexAnalyticsProvider(coingeckoService, rpcUrl)
     const analyticsData = await provider.getAnalytics(address)
     const marketCap = await new IndexMarketCapProvider(
       rpcProvider,
@@ -50,7 +55,7 @@ describe("IndexAnalyticsProvider", () => {
   })
   test("returns minimum analytics data", async () => {
     const address = "0x72e364F2ABdC788b7E918bc238B21f109Cd634D7" // MVI
-    const provider = new IndexAnalyticsProvider(rpcProvider, coingeckoService)
+    const provider = new IndexAnalyticsProvider(coingeckoService, rpcUrl)
     const analyticsData = await provider.getAnalytics(address, {})
     const navPrice = await new IndexNavProvider(
       rpcProvider,

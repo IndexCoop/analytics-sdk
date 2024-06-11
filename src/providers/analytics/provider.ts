@@ -1,10 +1,11 @@
-import { providers, utils } from "ethers"
+import { utils } from "ethers"
 
 import {
   CoinGeckoService,
   CoinGeckoUtils,
   CoingeckoTokenPriceResponse,
   getFulfilledValueOrNull,
+  getRpcProvider,
 } from "../../utils"
 import { IndexMarketCapProvider } from "../marketcap"
 import { IndexNavProvider } from "../nav"
@@ -45,10 +46,8 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
   private chainId = 1
 
   constructor(
-    private readonly provider:
-      | providers.JsonRpcProvider
-      | providers.StaticJsonRpcProvider,
     private readonly coingeckoService: CoinGeckoService,
+    private readonly rpcUrl: string,
   ) {}
 
   async getAnalytics(
@@ -60,7 +59,8 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
       include24hrVolume: true,
     },
   ): Promise<IndexAnalytics> {
-    const { baseCurrency, chainId, coingeckoService, provider } = this
+    const provider = getRpcProvider(this.rpcUrl)
+    const { baseCurrency, chainId, coingeckoService } = this
     const supplyProvider = new IndexSupplyProvider(provider)
     const marketCapProvider = new IndexMarketCapProvider(
       provider,

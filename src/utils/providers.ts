@@ -21,7 +21,19 @@ export function buildAlchemyProvider(
   chainId: number,
   apiKey: string,
 ): providers.JsonRpcProvider {
+  const url = buildAlchemyProviderUrl(chainId, apiKey)
+  return new providers.JsonRpcProvider(url)
+}
+
+export function buildAlchemyProviderUrl(
+  chainId: number,
+  apiKey: string,
+): string {
   const subdomain = getAlchemySubdomain(chainId)
   const url = `https://${subdomain}-mainnet.g.alchemy.com/v2/${apiKey}`
-  return new providers.JsonRpcProvider(url)
+  return url
+}
+
+export function getRpcProvider(rpcUrl: string) {
+  return new providers.JsonRpcProvider(rpcUrl)
 }
