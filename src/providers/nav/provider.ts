@@ -1,6 +1,8 @@
-import { BigNumber, Contract, providers, utils } from "ethers"
+import { BigNumber, providers, utils } from "ethers"
 
 import { CoinGeckoService, FindPricesResponse } from "utils/coingecko"
+import { getDecimals } from "../../utils/erc20"
+import { getPositions } from "../../utils/positions"
 import { FliNavProvider } from "./fli-nav-provider"
 import { HyEthNavProvider } from "./hyeth"
 import { IcSmmtNavProvider } from "./icsmmt"
@@ -62,11 +64,10 @@ export class IndexNavProvider implements NavProvider {
       return nav
     }
     // Any other Index token
-    const contract = new Contract(address, indexTokenAbi, provider)
-    const positions: Position[] = await contract.getPositions()
+    const positions: Position[] = await getPositions(address, provider)
     const positionPrices = await this.getPositionPrices(positions, chainId)
     const decimalsForPositionPromises = positions.map((p: Position) => {
-      return this.getDecimals(p.component)
+      return getDecimals(p.component, provider)
     })
     const decimalsForPosition = await Promise.all(decimalsForPositionPromises)
     const usdValues = positions.map((p: Position, index) => {
@@ -81,11 +82,6 @@ export class IndexNavProvider implements NavProvider {
     return nav
   }
 
-  private async getDecimals(address: string): Promise<number> {
-    const contract = new Contract(address, Erc20Abi, this.provider)
-    return await contract.decimals()
-  }
-
   private async getPositionPrices(
     positions: Position[],
     chainId: number,
@@ -98,28 +94,3 @@ export class IndexNavProvider implements NavProvider {
     })
   }
 }
-
-const Erc20Abi = ["function decimals() public view returns (uint8)"]
-
-const indexTokenAbi = [
-  {
-    inputs: [],
-    name: "getPositions",
-    outputs: [
-      {
-        components: [
-          { internalType: "address", name: "component", type: "address" },
-          { internalType: "address", name: "module", type: "address" },
-          { internalType: "int256", name: "unit", type: "int256" },
-          { internalType: "uint8", name: "positionState", type: "uint8" },
-          { internalType: "bytes", name: "data", type: "bytes" },
-        ],
-        internalType: "struct ISetToken.Position[]",
-        name: "",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-]
