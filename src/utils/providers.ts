@@ -20,9 +20,10 @@ export function getAlchemySubdomain(chainId: number): string | null {
 export function buildAlchemyProvider(
   chainId: number,
   apiKey: string,
+  skipFetchSetup?: boolean,
 ): providers.JsonRpcProvider {
   const url = buildAlchemyProviderUrl(chainId, apiKey)
-  return new providers.JsonRpcProvider(url)
+  return new providers.JsonRpcProvider({ url, skipFetchSetup })
 }
 
 export function buildAlchemyProviderUrl(
@@ -34,6 +35,6 @@ export function buildAlchemyProviderUrl(
   return url
 }
 
-export function getRpcProvider(rpcUrl: string) {
-  return new providers.JsonRpcProvider(rpcUrl)
+export function getRpcProvider(rpcUrl: string, skipFetchSetup?: boolean) {
+  return new providers.JsonRpcProvider({ url: rpcUrl, skipFetchSetup })
 }
