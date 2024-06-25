@@ -35,5 +35,5 @@ export function buildAlchemyProviderUrl(
 }
 
 export function getRpcProvider(rpcUrl: string) {
-  return new providers.JsonRpcProvider(rpcUrl)
+  return new providers.JsonRpcProvider({ url: rpcUrl, skipFetchSetup: true })
 }
