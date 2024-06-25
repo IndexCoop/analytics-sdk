@@ -35,6 +35,10 @@ export class HyEthNavProvider {
     return isSameAddress(token, "0xA0D3707c569ff8C87FA923d3823eC5D81c98Be78")
   }
 
+  isMorpho(token: string) {
+    return isSameAddress(token, "0x78Fc2c2eD1A4cDb5402365934aE5648aDAd094d0")
+  }
+
   isPendle(token: string) {
     const pendleTokens: string[] = [
       "0x1c085195437738d73d75DC64bC5A3E098b7f93b1",
@@ -67,6 +71,15 @@ export class HyEthNavProvider {
     const tokenContract = new Contract(component, abi, this.provider)
     const stEthAmount: BigNumber = await tokenContract.previewMint(unit)
     return stEthAmount
+  }
+
+  async getMorphoAmount(component: string, unit: BigNumber) {
+    const abi = [
+      "function previewMint(uint256 shares) public view returns (uint256)",
+    ]
+    const tokenContract = new Contract(component, abi, this.provider)
+    const ethAmount: BigNumber = await tokenContract.previewMint(unit)
+    return ethAmount
   }
 
   async getPendleAmount(component: string, unit: BigNumber) {
@@ -141,6 +154,9 @@ export class HyEthNavProvider {
       }
       if (this.isInstdapp(component)) {
         return this.getInstadappAmount(component, unit)
+      }
+      if (this.isMorpho(component)) {
+        return this.getMorphoAmount(component, unit)
       }
       if (this.isPendle(component)) {
         return this.getPendleAmount(component, unit)
