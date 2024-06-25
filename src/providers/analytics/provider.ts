@@ -63,7 +63,7 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
       throw new Error("Unknown index token or wrong chainId")
     }
 
-    const provider = getRpcProvider(this.rpcUrl)
+    const provider = getRpcProvider(this.rpcUrl, true)
     const { baseCurrency, coingeckoService } = this
     const supplyProvider = new IndexSupplyProvider(provider)
     const marketCapProvider = new IndexMarketCapProvider(
