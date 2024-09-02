@@ -17,8 +17,12 @@ const rpcProviderArbitrum = buildAlchemyProvider(
   ChainId.Arbitrum,
   process.env.ALCHEMY_API_KEY!,
 )
+const rpcProviderBase = buildAlchemyProvider(
+  ChainId.Base,
+  process.env.ALCHEMY_API_KEY!,
+)
 
-describe("IndexSupplyProvider (Mainnet)", () => {
+describe("IndexNavProvider (Mainnet)", () => {
   test("returns the NAV for cdETI", async () => {
     const cdETI = "0x55b2CFcfe99110C773f00b023560DD9ef6C8A13B"
     const provider = new IndexNavProvider(rpcProvider, coingeckoService)
@@ -76,7 +80,7 @@ describe("IndexSupplyProvider (Mainnet)", () => {
   })
 })
 
-describe("IndexSupplyProvider (Arbitrum)", () => {
+describe("IndexNavProvider (Arbitrum)", () => {
   test("returns the NAV for BTC2X", async () => {
     const btc2x = "0xeb5bE62e6770137beaA0cC712741165C594F59D7"
     const provider = new IndexNavProvider(rpcProviderArbitrum, coingeckoService)
@@ -116,6 +120,22 @@ describe("IndexSupplyProvider (Arbitrum)", () => {
     const ieth1x = "0x749654601a286833aD30357246400D2933b1C89b"
     const provider = new IndexNavProvider(rpcProviderArbitrum, coingeckoService)
     const nav = await provider.getNav(ieth1x)
+    await expect(nav).toBeGreaterThan(0)
+  })
+})
+
+describe("IndexNavProvider (Base)", () => {
+  test("returns the NAV for ETH2X", async () => {
+    const eth2x = "0xC884646E6C88d9b172a23051b38B0732Cc3E35a6"
+    const provider = new IndexNavProvider(rpcProviderBase, coingeckoService)
+    const nav = await provider.getNav(eth2x)
+    await expect(nav).toBeGreaterThan(0)
+  })
+
+  test("returns the NAV for ETH3X", async () => {
+    const eth3x = "0x329f6656792c7d34D0fBB9762FA9A8F852272acb"
+    const provider = new IndexNavProvider(rpcProviderBase, coingeckoService)
+    const nav = await provider.getNav(eth3x)
     await expect(nav).toBeGreaterThan(0)
   })
 })
