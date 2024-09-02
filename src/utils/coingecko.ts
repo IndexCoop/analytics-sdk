@@ -111,6 +111,8 @@ export class CoinGeckoService {
     switch (chainId) {
       case ChainId.Arbitrum:
         return "arbitrum-one"
+      case ChainId.Base:
+        return "base"
       case ChainId.Mainnet:
         return "ethereum"
       case ChainId.Optimism:
