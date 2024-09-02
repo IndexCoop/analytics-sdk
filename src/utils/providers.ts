@@ -6,6 +6,8 @@ export function getAlchemySubdomain(chainId: number): string | null {
   switch (chainId) {
     case ChainId.Arbitrum:
       return "arb"
+    case ChainId.Base:
+      return "base"
     case ChainId.Mainnet:
       return "eth"
     case ChainId.Optimism:
