@@ -9,14 +9,14 @@ const rpcProvider = buildAlchemyProvider(1, process.env.ALCHEMY_API_KEY!)
 
 describe("FliNavProvider", () => {
   test("returns NAV for BTC2x-FLI", async () => {
-    const btc2xfli = getTokenByChainAndSymbol(1, "BTC2x-FLI")!.address
+    const btc2xfli = getTokenByChainAndSymbol(1, "BTC2x-FLI").address
     const provider = new FliNavProvider(rpcProvider, coingeckoService)
     const nav = await provider.getNav(btc2xfli)
     expect(nav).toBeGreaterThan(1)
   })
 
   test("returns NAV for ETH2xFLI", async () => {
-    const eth2xfli = getTokenByChainAndSymbol(1, "ETH2x-FLI")!.address
+    const eth2xfli = getTokenByChainAndSymbol(1, "ETH2x-FLI").address
     const provider = new FliNavProvider(rpcProvider, coingeckoService)
     const nav = await provider.getNav(eth2xfli)
     expect(nav).toBeGreaterThan(1)
