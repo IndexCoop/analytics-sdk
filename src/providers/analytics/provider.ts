@@ -1,5 +1,8 @@
 import { utils } from "ethers"
-import { getChainTokenList, isAddressEqual } from "@nsorcell/exp-tokenlist"
+import {
+  getChainProductTokenList,
+  isAddressEqual,
+} from "@nsorcell/exp-tokenlist"
 
 import {
   CoinGeckoService,
@@ -58,7 +61,7 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
       include24hrVolume: true,
     },
   ): Promise<IndexAnalytics> {
-    const indices = getChainTokenList(chainId, ["index"])
+    const indices = getChainProductTokenList(chainId)
     const token = indices.find((token) =>
       isAddressEqual(token.address, address),
     )
