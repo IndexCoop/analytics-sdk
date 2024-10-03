@@ -1,5 +1,8 @@
 import { utils } from "ethers"
-import { getIndexTokenDataByAddress } from "@indexcoop/tokenlists"
+import {
+  getChainProductTokenList,
+  isAddressEqual,
+} from "@nsorcell/exp-tokenlist"
 
 import {
   CoinGeckoService,
@@ -58,7 +61,10 @@ export class IndexAnalyticsProvider implements AnalyticsProvider {
       include24hrVolume: true,
     },
   ): Promise<IndexAnalytics> {
-    const token = getIndexTokenDataByAddress(address, chainId)
+    const indices = getChainProductTokenList(chainId)
+    const token = indices.find((token) =>
+      isAddressEqual(token.address, address),
+    )
     if (!token) {
       throw new Error("Unknown index token or wrong chainId")
     }
