@@ -91,7 +91,7 @@ export class HyEthNavProvider {
       "function getPtToAssetRate(address market) public view returns (uint256)",
     ]
     const fmHyEth = new Contract(
-      "0xC290c371F5a36970AfF00bbffDBFADd81820109a",
+      "0xCb1eEA349f25288627f008C5e2a69b684bddDf49",
       abi,
       this.provider,
     )
