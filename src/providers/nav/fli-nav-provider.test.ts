@@ -1,4 +1,4 @@
-import { getTokenByChainAndSymbol } from "@nsorcell/exp-tokenlist"
+import { getTokenByChainAndSymbol } from "@indexcoop/tokenlists"
 
 import { buildAlchemyProvider, CoinGeckoService } from "../../utils"
 import { FliNavProvider } from "./fli-nav-provider"

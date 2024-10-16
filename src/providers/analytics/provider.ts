@@ -1,8 +1,5 @@
 import { utils } from "ethers"
-import {
-  getChainProductTokenList,
-  isAddressEqual,
-} from "@nsorcell/exp-tokenlist"
+import { getChainProductTokenList, isAddressEqual } from "@indexcoop/tokenlists"
 
 import {
   CoinGeckoService,
