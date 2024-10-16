@@ -62,7 +62,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@nsorcell/exp-tokenlist": "1.25.0",
+    "@indexcoop/tokenlists": "3.1.0",
     "ethers": "5.7.2"
   }
 }
