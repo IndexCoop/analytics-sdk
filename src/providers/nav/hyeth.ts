@@ -44,6 +44,7 @@ export class HyEthNavProvider {
       "0x1c085195437738d73d75DC64bC5A3E098b7f93b1",
       "0x6ee2b5E19ECBa773a352E5B21415Dc419A700d1d",
       "0xf7906F274c174A52d444175729E3fa98f9bde285",
+      "0x7aa68E84bCD8d1B4C9e10B1e565DB993f68a3E09",
     ]
     return pendleTokens.some((pendleToken) => isSameAddress(pendleToken, token))
   }
@@ -90,7 +91,7 @@ export class HyEthNavProvider {
       "function getPtToAssetRate(address market) public view returns (uint256)",
     ]
     const fmHyEth = new Contract(
-      "0xC290c371F5a36970AfF00bbffDBFADd81820109a",
+      "0xCb1eEA349f25288627f008C5e2a69b684bddDf49",
       abi,
       this.provider,
     )

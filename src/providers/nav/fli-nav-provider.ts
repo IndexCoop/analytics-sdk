@@ -3,7 +3,7 @@ import { providers, utils } from "ethers"
 import {
   getTokenByChainAndAddress,
   getTokenByChainAndSymbol,
-} from "@nsorcell/exp-tokenlist"
+} from "@indexcoop/tokenlists"
 
 import { CoinGeckoService } from "utils/coingecko"
 import { getPositions } from "../../utils/positions"
