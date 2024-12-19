@@ -20,9 +20,11 @@ function getCoingeckoId(symbol: string) {
 export class CoingeckoProvider {
   constructor(private readonly coingeckoService: CoinGeckoService) {}
 
-  async getTokenStats(symbol: string): Promise<TokenStatsResponse> {
+  async getTokenStats(
+    symbol: string,
+    baseCurrency = "usd",
+  ): Promise<TokenStatsResponse> {
     const { coingeckoService } = this
-    const baseCurrency = "usd"
     const coinId = getCoingeckoId(symbol)
     const simplePriceData = (
       await coingeckoService.getTokenPriceById({
