@@ -22,7 +22,7 @@ export class CoingeckoProvider {
 
   async getTokenStats(
     symbol: string,
-    baseCurrency: string = "usd",
+    baseCurrency = "usd",
   ): Promise<TokenStatsResponse> {
     const { coingeckoService } = this
     const coinId = getCoingeckoId(symbol)
