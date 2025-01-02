@@ -56,6 +56,44 @@ describe("IndexAnalyticsProvider", () => {
     expect(analyticsData.volume24h).toEqual(volume)
   })
 
+  test("returns complete analytics data (hyETH)", async () => {
+    const address = "0xc4506022Fb8090774E8A628d5084EED61D9B99Ee"
+    const provider = new IndexAnalyticsProvider(coingeckoService, rpcUrl)
+    const analyticsData = await provider.getAnalytics(address, 1)
+    const marketCap = await new IndexMarketCapProvider(
+      rpcProvider,
+      coingeckoService,
+    ).getMarketCap(address)
+    const navPrice = await new IndexNavProvider(
+      rpcProvider,
+      coingeckoService,
+    ).getNav(address)
+    const supplyProvider = new IndexSupplyProvider(rpcProvider)
+    const totalSupply = await supplyProvider.getSupply(address)
+    const coingeckoRes = await coingeckoService.getTokenPrice({
+      address,
+      chainId: ChainId.Mainnet,
+      baseCurrency: "usd",
+      include24hrChange: true,
+      include24hrVol: true,
+    })
+    const change24h = coingeckoRes[address.toLowerCase()]["usd_24h_change"]
+    const marketPrice = coingeckoRes[address.toLowerCase()]["usd"]
+    const volume = coingeckoRes[address.toLowerCase()]["usd_24h_vol"]
+    expect(analyticsData.address).toEqual(address)
+    expect(analyticsData.name).toEqual("High Yield ETH Index")
+    expect(analyticsData.symbol).toEqual("hyETH")
+    expect(analyticsData.decimals).toEqual(18)
+    expect(analyticsData.marketCap).toEqual(marketCap)
+    expect(analyticsData.marketPrice).toEqual(marketPrice)
+    expect(analyticsData.navPrice).toBeCloseTo(navPrice)
+    expect(analyticsData.totalSupply).toEqual(
+      utils.formatUnits(totalSupply.toString()),
+    )
+    expect(analyticsData.change24h).toEqual(change24h)
+    expect(analyticsData.volume24h).toEqual(volume)
+  })
+
   test("returns complete analytics data - arbitrum", async () => {
     const address = "0x3bDd0d5c0C795b2Bf076F5C8F177c58e42beC0E6" // BTC3X
     const chainId = ChainId.Arbitrum
