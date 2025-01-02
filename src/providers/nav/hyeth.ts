@@ -36,7 +36,7 @@ export class HyEthNavProvider {
   }
 
   isMorpho(token: string) {
-    return isSameAddress(token, "0x78Fc2c2eD1A4cDb5402365934aE5648aDAd094d0")
+    return isSameAddress(token, "0xc554929a61d862F2741077F8aafa147479c0b308")
   }
 
   isPendle(token: string) {
