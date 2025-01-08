@@ -62,7 +62,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@indexcoop/tokenlists": "3.5.0",
+    "@indexcoop/tokenlists": "3.7.0",
     "ethers": "5.7.2"
   }
 }
