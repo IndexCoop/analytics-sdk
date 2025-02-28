@@ -1,4 +1,4 @@
-import { CoinGeckoService, CoinGeckoUtils } from "../../utils/"
+import { type CoinGeckoService, CoinGeckoUtils } from "../../utils/"
 
 interface TokenStatsResponse {
   symbol: string
@@ -12,6 +12,10 @@ function getCoingeckoId(symbol: string) {
   switch (symbol) {
     case "BTC":
       return "bitcoin"
+    case "SOL":
+      return "solana"
+    case "SUI":
+      return "sui"
     default:
       return "ethereum"
   }
